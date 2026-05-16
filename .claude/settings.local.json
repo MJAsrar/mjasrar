@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:api.anthropic.com)",
+      "Bash(cp -r /c/Users/junai/Desktop/mjasrar/. /c/Users/junai/Desktop/new/)",
+      "Bash(rm -rf /c/Users/junai/Desktop/mjasrar)",
+      "Bash(npm run *)",
+      "Bash(curl -s http://localhost:3000)",
+      "Bash(kill %1)"
+    ]
+  }
+}

@@ -1,0 +1,1378 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>mjasrar — building a software ecosystem</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg:        #0a0a0b;
+    --bg-deep:   #060607;
+    --surface:   #111114;
+    --surface-2: #15161a;
+    --line:      rgba(255,255,255,0.07);
+    --line-2:    rgba(255,255,255,0.12);
+    --line-3:    rgba(255,255,255,0.18);
+    --fg:        #ededed;
+    --fg-2:      #c8c8cc;
+    --mute:      #82828a;
+    --mute-2:    #5a5a62;
+    --accent:    oklch(0.86 0.17 138);
+    --accent-2:  oklch(0.86 0.17 138 / 0.14);
+    --accent-3:  oklch(0.86 0.17 138 / 0.32);
+    --danger:    oklch(0.72 0.18 25);
+    --warn:      oklch(0.82 0.14 75);
+    --info:      oklch(0.78 0.14 240);
+
+    --r-sm: 6px;
+    --r-md: 10px;
+    --r-lg: 16px;
+    --r-xl: 22px;
+
+    --pad-section: 120px;
+    --container: 1280px;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--fg); }
+  body {
+    font-family: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    letter-spacing: -0.005em;
+    overflow-x: hidden;
+  }
+
+  .mono { font-family: "Geist Mono", ui-monospace, "JetBrains Mono", Menlo, monospace; }
+
+  ::selection { background: var(--accent-3); color: var(--fg); }
+
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; }
+
+  .container { max-width: var(--container); margin: 0 auto; padding: 0 32px; }
+
+  .bg-grid {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 56px 56px;
+    background-position: -1px -1px;
+    mask-image: radial-gradient(ellipse 90% 70% at 50% 0%, #000 30%, transparent 75%);
+  }
+  .bg-glow {
+    position: fixed; top: -200px; left: 50%; transform: translateX(-50%);
+    width: 1100px; height: 700px; pointer-events: none; z-index: 0;
+    background: radial-gradient(closest-side, var(--accent-2), transparent 70%);
+    opacity: 0.7;
+    filter: blur(20px);
+  }
+
+  .chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    height: 24px; padding: 0 9px;
+    border: 1px solid var(--line-2); border-radius: 999px;
+    background: rgba(255,255,255,0.02);
+    font-family: "Geist Mono", monospace; font-size: 11px; color: var(--fg-2);
+    letter-spacing: 0.02em;
+  }
+  .chip .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--mute); }
+  .chip.live .dot { background: var(--accent); box-shadow: 0 0 0 3px var(--accent-2); }
+  .chip.warn .dot { background: var(--warn); }
+  .chip.info .dot { background: var(--info); }
+  .chip.muted .dot { background: var(--mute-2); }
+
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    height: 40px; padding: 0 16px;
+    border-radius: var(--r-md);
+    border: 1px solid var(--line-2);
+    background: rgba(255,255,255,0.03);
+    color: var(--fg);
+    font-size: 14px; font-weight: 500;
+    cursor: pointer;
+    transition: background 120ms ease, border-color 120ms ease, transform 120ms ease;
+  }
+  .btn:hover { background: rgba(255,255,255,0.06); border-color: var(--line-3); }
+  .btn:active { transform: translateY(1px); }
+  .btn.primary {
+    background: var(--fg); color: #0a0a0b; border-color: var(--fg);
+  }
+  .btn.primary:hover { background: #fff; }
+  .btn .arrow { transition: transform 180ms ease; }
+  .btn:hover .arrow { transform: translateX(2px); }
+
+  .kbd {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 18px; height: 18px; padding: 0 5px;
+    border: 1px solid var(--line-2); border-bottom-width: 2px;
+    border-radius: 4px;
+    font-family: "Geist Mono", monospace; font-size: 10.5px; color: var(--fg-2);
+    background: rgba(255,255,255,0.02);
+  }
+
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+  }
+  .panel.hover { transition: border-color 160ms ease, background 160ms ease, transform 160ms ease; }
+  .panel.hover:hover { border-color: var(--line-2); background: var(--surface-2); }
+
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: "Geist Mono", monospace;
+    font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--mute);
+  }
+  .eyebrow::before {
+    content: ""; width: 24px; height: 1px; background: var(--line-3);
+  }
+
+  h1, h2, h3, h4 { margin: 0; letter-spacing: -0.02em; font-weight: 500; }
+  h1 { font-size: clamp(48px, 6.4vw, 92px); line-height: 1.02; letter-spacing: -0.035em; font-weight: 500; }
+  h2 { font-size: clamp(32px, 3.6vw, 48px); line-height: 1.08; letter-spacing: -0.028em; }
+  h3 { font-size: 20px; line-height: 1.25; }
+  p  { margin: 0; color: var(--fg-2); }
+
+  .section { position: relative; padding: var(--pad-section) 0; z-index: 1; }
+  .section-head { display: flex; flex-direction: column; gap: 18px; margin-bottom: 56px; max-width: 760px; }
+  .section-head .lead { font-size: 17px; color: var(--mute); }
+
+  body[data-density="compact"] { --pad-section: 84px; }
+  body[data-density="comfy"]   { --pad-section: 160px; }
+
+  .twk-panel { color: #0a0a0b; }
+
+  .reveal { opacity: 0; transform: translateY(14px); transition: opacity 700ms ease, transform 700ms cubic-bezier(.2,.7,.2,1); }
+  .reveal.in { opacity: 1; transform: none; }
+
+  @media (max-width: 880px) {
+    :root { --pad-section: 80px; }
+    .container { padding: 0 20px; }
+  }
+</style>
+</head>
+
+<body data-density="compact">
+
+  <div class="bg-glow"></div>
+  <div class="bg-grid"></div>
+
+  <div id="root"></div>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin="anonymous"></script>
+
+  <script>
+    window.TWEAK_DEFAULTS = {
+      "accent": "phosphor",
+      "heroLine": 0,
+      "density": "compact",
+      "showLiveTool": true
+    };
+  </script>
+
+  <!-- tweaks-panel -->
+  <script type="text/babel">
+const __TWEAKS_STYLE = `
+  .twk-panel{position:fixed;right:16px;bottom:16px;z-index:2147483646;width:280px;
+    max-height:calc(100vh - 32px);display:flex;flex-direction:column;
+    transform:scale(var(--dc-inv-zoom,1));transform-origin:bottom right;
+    background:rgba(250,249,247,.78);color:#29261b;
+    -webkit-backdrop-filter:blur(24px) saturate(160%);backdrop-filter:blur(24px) saturate(160%);
+    border:.5px solid rgba(255,255,255,.6);border-radius:14px;
+    box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 12px 40px rgba(0,0,0,.18);
+    font:11.5px/1.4 ui-sans-serif,system-ui,-apple-system,sans-serif;overflow:hidden}
+  .twk-hd{display:flex;align-items:center;justify-content:space-between;
+    padding:10px 8px 10px 14px;cursor:move;user-select:none}
+  .twk-hd b{font-size:12px;font-weight:600;letter-spacing:.01em}
+  .twk-x{appearance:none;border:0;background:transparent;color:rgba(41,38,27,.55);
+    width:22px;height:22px;border-radius:6px;cursor:default;font-size:13px;line-height:1}
+  .twk-x:hover{background:rgba(0,0,0,.06);color:#29261b}
+  .twk-body{padding:2px 14px 14px;display:flex;flex-direction:column;gap:10px;
+    overflow-y:auto;overflow-x:hidden;min-height:0;
+    scrollbar-width:thin;scrollbar-color:rgba(0,0,0,.15) transparent}
+  .twk-row{display:flex;flex-direction:column;gap:5px}
+  .twk-row-h{flex-direction:row;align-items:center;justify-content:space-between;gap:10px}
+  .twk-lbl{display:flex;justify-content:space-between;align-items:baseline;color:rgba(41,38,27,.72)}
+  .twk-lbl>span:first-child{font-weight:500}
+  .twk-val{color:rgba(41,38,27,.5);font-variant-numeric:tabular-nums}
+  .twk-sect{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+    color:rgba(41,38,27,.45);padding:10px 0 0}
+  .twk-sect:first-child{padding-top:0}
+  .twk-field{appearance:none;box-sizing:border-box;width:100%;min-width:0;height:26px;padding:0 8px;
+    border:.5px solid rgba(0,0,0,.1);border-radius:7px;
+    background:rgba(255,255,255,.6);color:inherit;font:inherit;outline:none}
+  .twk-field:focus{border-color:rgba(0,0,0,.25);background:rgba(255,255,255,.85)}
+  select.twk-field{padding-right:22px;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path fill='rgba(0,0,0,.5)' d='M0 0h10L5 6z'/></svg>");
+    background-repeat:no-repeat;background-position:right 8px center}
+  .twk-slider{appearance:none;-webkit-appearance:none;width:100%;height:4px;margin:6px 0;
+    border-radius:999px;background:rgba(0,0,0,.12);outline:none}
+  .twk-slider::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;
+    background:#fff;border:.5px solid rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.2);cursor:default}
+  .twk-seg{position:relative;display:flex;padding:2px;border-radius:8px;background:rgba(0,0,0,.06);user-select:none}
+  .twk-seg-thumb{position:absolute;top:2px;bottom:2px;border-radius:6px;
+    background:rgba(255,255,255,.9);box-shadow:0 1px 2px rgba(0,0,0,.12);
+    transition:left .15s cubic-bezier(.3,.7,.4,1),width .15s}
+  .twk-seg button{appearance:none;position:relative;z-index:1;flex:1;border:0;
+    background:transparent;color:inherit;font:inherit;font-weight:500;min-height:22px;
+    border-radius:6px;cursor:default;padding:4px 6px;line-height:1.2}
+  .twk-toggle{position:relative;width:32px;height:18px;border:0;border-radius:999px;
+    background:rgba(0,0,0,.15);transition:background .15s;cursor:default;padding:0}
+  .twk-toggle[data-on="1"]{background:#34c759}
+  .twk-toggle i{position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;
+    background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .15s}
+  .twk-toggle[data-on="1"] i{transform:translateX(14px)}
+  .twk-chips{display:flex;gap:6px}
+  .twk-chip{position:relative;appearance:none;flex:1;min-width:0;height:46px;
+    padding:0;border:0;border-radius:6px;overflow:hidden;cursor:default;
+    box-shadow:0 0 0 .5px rgba(0,0,0,.12),0 1px 2px rgba(0,0,0,.06);
+    transition:transform .12s,box-shadow .12s}
+  .twk-chip:hover{transform:translateY(-1px);box-shadow:0 0 0 .5px rgba(0,0,0,.18),0 4px 10px rgba(0,0,0,.12)}
+  .twk-chip[data-on="1"]{box-shadow:0 0 0 1.5px rgba(0,0,0,.85),0 2px 6px rgba(0,0,0,.15)}
+  .twk-chip svg{position:absolute;top:6px;left:6px;width:13px;height:13px;filter:drop-shadow(0 1px 1px rgba(0,0,0,.3))}
+`;
+
+function useTweaks(defaults) {
+  const [values, setValues] = React.useState(defaults);
+  const setTweak = React.useCallback((keyOrEdits, val) => {
+    const edits = typeof keyOrEdits === 'object' && keyOrEdits !== null
+      ? keyOrEdits : { [keyOrEdits]: val };
+    setValues((prev) => ({ ...prev, ...edits }));
+    window.parent.postMessage({ type: '__edit_mode_set_keys', edits }, '*');
+    window.dispatchEvent(new CustomEvent('tweakchange', { detail: edits }));
+  }, []);
+  return [values, setTweak];
+}
+
+function TweaksPanel({ title = 'Tweaks', children }) {
+  const [open, setOpen] = React.useState(false);
+  const dragRef = React.useRef(null);
+  const offsetRef = React.useRef({ x: 16, y: 16 });
+  const PAD = 16;
+
+  const clampToViewport = React.useCallback(() => {
+    const panel = dragRef.current;
+    if (!panel) return;
+    const w = panel.offsetWidth, h = panel.offsetHeight;
+    const maxRight = Math.max(PAD, window.innerWidth - w - PAD);
+    const maxBottom = Math.max(PAD, window.innerHeight - h - PAD);
+    offsetRef.current = {
+      x: Math.min(maxRight, Math.max(PAD, offsetRef.current.x)),
+      y: Math.min(maxBottom, Math.max(PAD, offsetRef.current.y)),
+    };
+    panel.style.right = offsetRef.current.x + 'px';
+    panel.style.bottom = offsetRef.current.y + 'px';
+  }, []);
+
+  React.useEffect(() => {
+    if (!open) return;
+    clampToViewport();
+    const ro = new ResizeObserver(clampToViewport);
+    ro.observe(document.documentElement);
+    return () => ro.disconnect();
+  }, [open, clampToViewport]);
+
+  React.useEffect(() => {
+    const onMsg = (e) => {
+      const t = e?.data?.type;
+      if (t === '__activate_edit_mode') setOpen(true);
+      else if (t === '__deactivate_edit_mode') setOpen(false);
+    };
+    window.addEventListener('message', onMsg);
+    window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+    return () => window.removeEventListener('message', onMsg);
+  }, []);
+
+  const dismiss = () => {
+    setOpen(false);
+    window.parent.postMessage({ type: '__edit_mode_dismissed' }, '*');
+  };
+
+  const onDragStart = (e) => {
+    const panel = dragRef.current;
+    if (!panel) return;
+    const r = panel.getBoundingClientRect();
+    const sx = e.clientX, sy = e.clientY;
+    const startRight = window.innerWidth - r.right;
+    const startBottom = window.innerHeight - r.bottom;
+    const move = (ev) => {
+      offsetRef.current = { x: startRight - (ev.clientX - sx), y: startBottom - (ev.clientY - sy) };
+      clampToViewport();
+    };
+    const up = () => {
+      window.removeEventListener('mousemove', move);
+      window.removeEventListener('mouseup', up);
+    };
+    window.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', up);
+  };
+
+  if (!open) return null;
+  return (
+    <>
+      <style>{__TWEAKS_STYLE}</style>
+      <div ref={dragRef} className="twk-panel" style={{ right: offsetRef.current.x, bottom: offsetRef.current.y }}>
+        <div className="twk-hd" onMouseDown={onDragStart}>
+          <b>{title}</b>
+          <button className="twk-x" onMouseDown={(e) => e.stopPropagation()} onClick={dismiss}>✕</button>
+        </div>
+        <div className="twk-body">{children}</div>
+      </div>
+    </>
+  );
+}
+
+function TweakSection({ label, children }) {
+  return (<><div className="twk-sect">{label}</div>{children}</>);
+}
+
+function TweakRow({ label, value, children, inline = false }) {
+  return (
+    <div className={inline ? 'twk-row twk-row-h' : 'twk-row'}>
+      <div className="twk-lbl">
+        <span>{label}</span>
+        {value != null && <span className="twk-val">{value}</span>}
+      </div>
+      {children}
+    </div>
+  );
+}
+
+function TweakSlider({ label, value, min = 0, max = 100, step = 1, unit = '', onChange }) {
+  return (
+    <TweakRow label={label} value={`${value}${unit}`}>
+      <input type="range" className="twk-slider" min={min} max={max} step={step}
+             value={value} onChange={(e) => onChange(Number(e.target.value))} />
+    </TweakRow>
+  );
+}
+
+function TweakToggle({ label, value, onChange }) {
+  return (
+    <div className="twk-row twk-row-h">
+      <div className="twk-lbl"><span>{label}</span></div>
+      <button type="button" className="twk-toggle" data-on={value ? '1' : '0'}
+              onClick={() => onChange(!value)}><i /></button>
+    </div>
+  );
+}
+
+function TweakRadio({ label, value, options, onChange }) {
+  const trackRef = React.useRef(null);
+  const [dragging, setDragging] = React.useState(false);
+  const valueRef = React.useRef(value);
+  valueRef.current = value;
+  const labelLen = (o) => String(typeof o === 'object' ? o.label : o).length;
+  const maxLen = options.reduce((m, o) => Math.max(m, labelLen(o)), 0);
+  const fitsAsSegments = maxLen <= ({ 2: 16, 3: 10 }[options.length] ?? 0);
+  if (!fitsAsSegments) {
+    return <TweakSelect label={label} value={value} options={options} onChange={onChange} />;
+  }
+  const opts = options.map((o) => (typeof o === 'object' ? o : { value: o, label: o }));
+  const idx = Math.max(0, opts.findIndex((o) => o.value === value));
+  const n = opts.length;
+  const segAt = (clientX) => {
+    const r = trackRef.current.getBoundingClientRect();
+    const i = Math.floor(((clientX - r.left - 2) / (r.width - 4)) * n);
+    return opts[Math.max(0, Math.min(n - 1, i))].value;
+  };
+  const onPointerDown = (e) => {
+    setDragging(true);
+    const v0 = segAt(e.clientX);
+    if (v0 !== valueRef.current) onChange(v0);
+    const move = (ev) => { if (trackRef.current) { const v = segAt(ev.clientX); if (v !== valueRef.current) onChange(v); } };
+    const up = () => { setDragging(false); window.removeEventListener('pointermove', move); window.removeEventListener('pointerup', up); };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+  };
+  return (
+    <TweakRow label={label}>
+      <div ref={trackRef} role="radiogroup" onPointerDown={onPointerDown}
+           className={dragging ? 'twk-seg dragging' : 'twk-seg'}>
+        <div className="twk-seg-thumb"
+             style={{ left: `calc(2px + ${idx} * (100% - 4px) / ${n})`, width: `calc((100% - 4px) / ${n})` }} />
+        {opts.map((o) => (
+          <button key={o.value} type="button" role="radio" aria-checked={o.value === value}>{o.label}</button>
+        ))}
+      </div>
+    </TweakRow>
+  );
+}
+
+function TweakSelect({ label, value, options, onChange }) {
+  return (
+    <TweakRow label={label}>
+      <select className="twk-field" value={value} onChange={(e) => onChange(e.target.value)}>
+        {options.map((o) => {
+          const v = typeof o === 'object' ? o.value : o;
+          const l = typeof o === 'object' ? o.label : o;
+          return <option key={v} value={v}>{l}</option>;
+        })}
+      </select>
+    </TweakRow>
+  );
+}
+
+function TweakColor({ label, value, options, onChange }) {
+  if (!options || !options.length) {
+    return (
+      <div className="twk-row twk-row-h">
+        <div className="twk-lbl"><span>{label}</span></div>
+        <input type="color" value={value} onChange={(e) => onChange(e.target.value)} />
+      </div>
+    );
+  }
+  const key = (o) => String(JSON.stringify(o)).toLowerCase();
+  const cur = key(value);
+  return (
+    <TweakRow label={label}>
+      <div className="twk-chips" role="radiogroup">
+        {options.map((o, i) => {
+          const colors = Array.isArray(o) ? o : [o];
+          const [hero] = colors;
+          const on = key(o) === cur;
+          return (
+            <button key={i} type="button" className="twk-chip" role="radio"
+                    data-on={on ? '1' : '0'} style={{ background: hero }}
+                    onClick={() => onChange(o)}>
+              {on && <svg viewBox="0 0 14 14"><path d="M3 7.2 5.8 10 11 4.2" fill="none" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" stroke="#fff" /></svg>}
+            </button>
+          );
+        })}
+      </div>
+    </TweakRow>
+  );
+}
+
+Object.assign(window, {
+  useTweaks, TweaksPanel, TweakSection, TweakRow,
+  TweakSlider, TweakToggle, TweakRadio, TweakSelect, TweakColor,
+});
+  </script>
+
+  <!-- icons -->
+  <script type="text/babel">
+const Ico = {
+  arrow: (p) => (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...p}>
+      <path d="M5 12h14M13 5l7 7-7 7" />
+    </svg>
+  ),
+  arrowUR: (p) => (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...p}>
+      <path d="M7 17 17 7M9 7h8v8" />
+    </svg>
+  ),
+  pdf: (p) => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...p}>
+      <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" />
+      <path d="M14 3v5h5M9 13h6M9 17h4" />
+    </svg>
+  ),
+  image: (p) => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...p}>
+      <rect x="3" y="4" width="18" height="16" rx="2" />
+      <circle cx="9" cy="10" r="1.6" />
+      <path d="m3 17 5-5 4 4 3-3 6 6" />
+    </svg>
+  ),
+  text: (p) => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...p}>
+      <path d="M4 6h16M7 6v14M17 6v14" />
+    </svg>
+  ),
+  code: (p) => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...p}>
+      <path d="m8 6-6 6 6 6M16 6l6 6-6 6M14 4l-4 16" />
+    </svg>
+  ),
+  spark: (p) => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...p}>
+      <path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M5.6 18.4l2.8-2.8M15.6 8.4l2.8-2.8" />
+    </svg>
+  ),
+  clip: (p) => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...p}>
+      <rect x="6" y="3" width="12" height="18" rx="2" />
+      <path d="M9 3v3h6V3" />
+    </svg>
+  ),
+  bolt: (p) => (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...p}>
+      <path d="M13 2 4 14h7l-1 8 9-12h-7z" />
+    </svg>
+  ),
+  search: (p) => (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" {...p}>
+      <circle cx="11" cy="11" r="7" />
+      <path d="m20 20-3.5-3.5" />
+    </svg>
+  ),
+  github: (p) => (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" {...p}>
+      <path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.1.79-.25.79-.56v-2.04c-3.2.7-3.87-1.36-3.87-1.36-.52-1.34-1.28-1.7-1.28-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.8 0c2.2-1.5 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.18 1.84 1.18 3.1 0 4.43-2.69 5.4-5.26 5.69.41.36.78 1.06.78 2.14v3.18c0 .31.21.67.8.55C20.21 21.39 23.5 17.08 23.5 12 23.5 5.65 18.35.5 12 .5Z"/>
+    </svg>
+  ),
+  download: (p) => (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" {...p}>
+      <path d="M12 4v12m0 0 4-4m-4 4-4-4M5 20h14" />
+    </svg>
+  ),
+};
+Object.assign(window, { Ico });
+  </script>
+
+  <!-- data -->
+  <script type="text/babel">
+const TOOL_CATEGORIES = [
+  { id: 'all',    label: 'All',        count: 24 },
+  { id: 'pdf',    label: 'PDF',        count: 6  },
+  { id: 'image',  label: 'Image',      count: 5  },
+  { id: 'text',   label: 'Text',       count: 4  },
+  { id: 'ai',     label: 'AI',         count: 5  },
+  { id: 'dev',    label: 'Developer',  count: 4  },
+];
+
+const TOOLS = [
+  { id:'pdf-compress',  cat:'pdf',   icon:'pdf',   name:'Compress PDF',        desc:'Shrink documents up to 90%',           state:'stable', ai:false, hot:true,  v:'1.4.0' },
+  { id:'pdf-merge',     cat:'pdf',   icon:'pdf',   name:'Merge PDF',           desc:'Combine files, reorder, drag',          state:'stable', ai:false, hot:false, v:'1.2.1' },
+  { id:'pdf-split',     cat:'pdf',   icon:'pdf',   name:'Split PDF',           desc:'Extract pages or ranges',               state:'stable', ai:false, hot:false, v:'1.1.0' },
+  { id:'pdf-sign',      cat:'pdf',   icon:'pdf',   name:'Sign PDF',            desc:'Local signing, no upload',              state:'beta',   ai:false, hot:false, v:'0.6.2' },
+  { id:'pdf-extract',   cat:'pdf',   icon:'pdf',   name:'Extract Text',        desc:'Clean prose from any PDF',              state:'stable', ai:true,  hot:false, v:'2.0.0' },
+  { id:'pdf-translate', cat:'pdf',   icon:'pdf',   name:'Translate PDF',       desc:'Layout-preserving, 40+ languages',      state:'beta',   ai:true,  hot:true,  v:'0.4.1' },
+  { id:'img-compress',  cat:'image', icon:'image', name:'Compress Image',      desc:'WebP, AVIF, JPEG — visually lossless',  state:'stable', ai:false, hot:false, v:'1.3.0' },
+  { id:'img-convert',   cat:'image', icon:'image', name:'Convert Format',      desc:'PNG · JPG · WebP · AVIF · HEIC',        state:'stable', ai:false, hot:false, v:'1.5.0' },
+  { id:'img-bgremove',  cat:'image', icon:'image', name:'Remove Background',   desc:'On-device, no upload',                  state:'stable', ai:true,  hot:true,  v:'1.0.0' },
+  { id:'img-upscale',   cat:'image', icon:'image', name:'Upscale 2×/4×',       desc:'Real-ESRGAN local pipeline',            state:'beta',   ai:true,  hot:false, v:'0.7.0' },
+  { id:'img-crop',      cat:'image', icon:'image', name:'Smart Crop',          desc:'Subject-aware framing',                 state:'beta',   ai:true,  hot:false, v:'0.5.0' },
+  { id:'txt-summarize', cat:'text',  icon:'text',  name:'Summarize',           desc:'Long-form → essentials',                state:'stable', ai:true,  hot:false, v:'1.1.0' },
+  { id:'txt-rewrite',   cat:'text',  icon:'text',  name:'Rewrite',             desc:'Tone, length, audience',                state:'stable', ai:true,  hot:false, v:'1.2.0' },
+  { id:'txt-diff',      cat:'text',  icon:'text',  name:'Diff & Merge',        desc:'Side-by-side comparison',               state:'stable', ai:false, hot:false, v:'1.0.0' },
+  { id:'txt-format',    cat:'text',  icon:'text',  name:'Format / Clean',      desc:'Whitespace, casing, encoding',          state:'stable', ai:false, hot:false, v:'1.4.0' },
+  { id:'ai-chat',       cat:'ai',    icon:'spark', name:'Workbench',           desc:'Multi-model scratchpad',                state:'beta',   ai:true,  hot:true,  v:'0.4.2' },
+  { id:'ai-extract',    cat:'ai',    icon:'spark', name:'Structured Extract',  desc:'Files → JSON, schema-aware',            state:'beta',   ai:true,  hot:false, v:'0.3.0' },
+  { id:'ai-vision',     cat:'ai',    icon:'spark', name:'Image Inspect',       desc:'Caption, OCR, tagging',                 state:'beta',   ai:true,  hot:false, v:'0.2.0' },
+  { id:'ai-voice',      cat:'ai',    icon:'spark', name:'Transcribe',          desc:'Audio → text + speakers',               state:'beta',   ai:true,  hot:false, v:'0.5.0' },
+  { id:'ai-translate',  cat:'ai',    icon:'spark', name:'Translate',           desc:'40+ languages, context-aware',          state:'stable', ai:true,  hot:false, v:'1.0.0' },
+  { id:'dev-json',      cat:'dev',   icon:'code',  name:'JSON Toolkit',        desc:'Format, query, validate',               state:'stable', ai:false, hot:false, v:'1.2.0' },
+  { id:'dev-regex',     cat:'dev',   icon:'code',  name:'Regex Lab',           desc:'Build, test, explain',                  state:'stable', ai:true,  hot:false, v:'1.1.0' },
+  { id:'dev-uuid',      cat:'dev',   icon:'code',  name:'UUID / Hash',         desc:'Generate, decode, verify',              state:'stable', ai:false, hot:false, v:'1.0.0' },
+  { id:'dev-jwt',       cat:'dev',   icon:'code',  name:'JWT Inspector',       desc:'Decode, validate, sign',                state:'stable', ai:false, hot:false, v:'1.0.0' },
+];
+
+const ECOSYSTEM = {
+  systems: [
+    {
+      id: 'utility', code: 'SYS.01', name: 'Utility Layer',
+      blurb: 'Document, image, and text tools. The foundation everything else builds on.',
+      modules: [
+        { name:'PDF Toolkit',   status:'shipped',  v:'1.4' },
+        { name:'Image Toolkit', status:'shipped',  v:'1.3' },
+        { name:'Text Toolkit',  status:'shipped',  v:'1.2' },
+        { name:'Audio Toolkit', status:'building', v:'0.3' },
+        { name:'Video Toolkit', status:'planned',  v:'—'   },
+      ],
+    },
+    {
+      id: 'ai', code: 'SYS.02', name: 'AI Layer',
+      blurb: 'Models exposed as small, sharp tools — not a chat box. Composes onto Utility.',
+      modules: [
+        { name:'Workbench',          status:'building', v:'0.4' },
+        { name:'Structured Extract', status:'building', v:'0.3' },
+        { name:'Vision Inspect',     status:'building', v:'0.2' },
+        { name:'Voice / Transcribe', status:'building', v:'0.5' },
+        { name:'Agents',             status:'planned',  v:'—'   },
+      ],
+    },
+    {
+      id: 'identity', code: 'SYS.03', name: 'Account & Sync',
+      blurb: 'Lightweight identity. Cross-device history, shared workspaces, no lock-in.',
+      modules: [
+        { name:'Local-first store', status:'shipped',  v:'1.0' },
+        { name:'Sync',              status:'building', v:'0.6' },
+        { name:'Workspaces',        status:'planned',  v:'—'   },
+        { name:'Teams',             status:'planned',  v:'—'   },
+      ],
+    },
+    {
+      id: 'platform', code: 'SYS.04', name: 'Platform & API',
+      blurb: 'The same primitives, surfaced for developers. Every tool callable from code.',
+      modules: [
+        { name:'Public API', status:'planned', v:'—' },
+        { name:'CLI',        status:'planned', v:'—' },
+        { name:'Webhooks',   status:'planned', v:'—' },
+        { name:'SDKs',       status:'planned', v:'—' },
+      ],
+    },
+  ],
+};
+
+const PROJECTS = [
+  { id:'p1', code:'M.01', name:'PDF runtime',       desc:'Wasm-based document pipeline powering the PDF Toolkit.',  tag:'Infra'    },
+  { id:'p2', code:'M.02', name:'On-device matting', desc:'Background removal that never sees a server.',           tag:'AI'       },
+  { id:'p3', code:'M.03', name:'Local-first store', desc:'Sync engine for cross-device tool history.',             tag:'Platform' },
+  { id:'p4', code:'M.04', name:'Workbench',         desc:'Multi-model scratchpad — primitive for everything AI.',  tag:'AI'       },
+];
+
+Object.assign(window, { TOOL_CATEGORIES, TOOLS, ECOSYSTEM, PROJECTS });
+  </script>
+
+  <!-- nav -->
+  <script type="text/babel">
+const navStyles = {
+  wrap: {
+    position: 'sticky', top: 0, zIndex: 50,
+    backdropFilter: 'blur(14px) saturate(160%)',
+    WebkitBackdropFilter: 'blur(14px) saturate(160%)',
+    background: 'rgba(10,10,11,0.62)',
+    borderBottom: '1px solid var(--line)',
+  },
+  inner: {
+    display: 'flex', alignItems: 'center', gap: 24,
+    height: 60, maxWidth: 'var(--container)', margin: '0 auto', padding: '0 32px',
+  },
+  brand: { display: 'flex', alignItems: 'center', gap: 10, cursor: 'default' },
+  glyph: {
+    width: 26, height: 26, borderRadius: 7,
+    background: 'linear-gradient(135deg, var(--accent), oklch(0.7 0.18 165))',
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
+    color: '#0a0a0b', fontWeight: 700, fontSize: 13, fontFamily: '"Geist Mono", monospace',
+    boxShadow: '0 0 0 1px rgba(255,255,255,0.06), inset 0 1px 0 rgba(255,255,255,0.4)',
+  },
+  statusDot: { width: 6, height: 6, borderRadius: '50%', background: 'var(--accent)', boxShadow: '0 0 0 3px var(--accent-2)' },
+};
+
+function Nav() {
+  const items = [
+    { id: 'tools',     label: 'Tools'     },
+    { id: 'ai',        label: 'AI'        },
+    { id: 'ecosystem', label: 'Ecosystem' },
+    { id: 'projects',  label: 'Projects'  },
+  ];
+  const [hover, setHover] = React.useState(null);
+  const scrollTo = (id) => { const el = document.getElementById(id); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); };
+
+  return (
+    <nav style={navStyles.wrap}>
+      <div style={navStyles.inner}>
+        <div style={navStyles.brand}>
+          <div style={navStyles.glyph}>m</div>
+          <span style={{ fontWeight: 600, fontSize: 15, letterSpacing: '-0.01em' }}>mjasrar</span>
+          <span style={{ color: 'var(--mute-2)', fontFamily: '"Geist Mono", monospace', fontSize: 13 }}>/</span>
+          <span style={{ color: 'var(--mute)', fontFamily: '"Geist Mono", monospace', fontSize: 12 }}>platform</span>
+        </div>
+
+        <div style={{ display: 'flex', gap: 4, marginLeft: 18 }} className="nav-links">
+          {items.map((it) => (
+            <a key={it.id}
+              style={{
+                height: 32, padding: '0 12px', display: 'flex', alignItems: 'center',
+                fontSize: 13.5, borderRadius: 8, cursor: 'default',
+                background: hover === it.id ? 'rgba(255,255,255,0.05)' : 'transparent',
+                color: hover === it.id ? 'var(--fg)' : 'var(--fg-2)',
+                transition: 'background 120ms ease, color 120ms ease',
+              }}
+              onMouseEnter={() => setHover(it.id)}
+              onMouseLeave={() => setHover(null)}
+              onClick={() => scrollTo(it.id)}
+            >{it.label}</a>
+          ))}
+        </div>
+
+        <div style={{ flex: 1 }} />
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontFamily: '"Geist Mono", monospace', fontSize: 11.5, color: 'var(--mute)', padding: '0 10px', height: 26, borderRadius: 999, border: '1px solid var(--line)' }}>
+            <span style={navStyles.statusDot} />
+            <span>all systems</span>
+          </div>
+          <button className="btn" style={{ height: 34, padding: '0 12px', fontSize: 13 }}>Sign in</button>
+          <button className="btn primary" style={{ height: 34, padding: '0 14px', fontSize: 13 }}>
+            Open app <Ico.arrow />
+          </button>
+        </div>
+      </div>
+      <style>{`@media(max-width:880px){.nav-links{display:none}}`}</style>
+    </nav>
+  );
+}
+window.Nav = Nav;
+  </script>
+
+  <!-- hero -->
+  <script type="text/babel">
+const HERO_LINES = [
+  { kicker: 'Indie SaaS · building in public', main: 'Building systems,',      accentSuffix: 'not standalone software.' },
+  { kicker: 'Tools-first founder',             main: 'A growing ecosystem',    accentSuffix: 'of software utilities.'   },
+  { kicker: 'AI as infrastructure',            main: 'AI-enhanced tooling,',   accentSuffix: 'wired into everyday work.' },
+];
+
+function MiniTerminal() {
+  return (
+    <div className="panel" style={{ padding: 0, overflow: 'hidden', boxShadow: '0 30px 80px -30px rgba(0,0,0,0.7)', background: '#0d0e10' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 12px', borderBottom: '1px solid var(--line)', fontFamily: '"Geist Mono", monospace', fontSize: 11, color: 'var(--mute)' }}>
+        <span style={{ width: 9, height: 9, borderRadius: '50%', background: '#3a3a3f' }} />
+        <span style={{ width: 9, height: 9, borderRadius: '50%', background: '#3a3a3f' }} />
+        <span style={{ width: 9, height: 9, borderRadius: '50%', background: '#3a3a3f' }} />
+        <span style={{ marginLeft: 8 }}>~/mjasrar/platform — main</span>
+      </div>
+      <pre style={{ margin: 0, padding: 16, fontFamily: '"Geist Mono", monospace', fontSize: 12.5, lineHeight: 1.7, color: 'var(--fg-2)' }}>
+<span style={{ color: 'var(--accent)' }}>$</span> mjs deploy pdf-toolkit{'\n'}
+<span style={{ color: 'var(--mute)' }}>→ building wasm runtime ............ ok</span>{'\n'}
+<span style={{ color: 'var(--mute)' }}>→ bundling 6 tools ................. ok</span>{'\n'}
+<span style={{ color: 'var(--mute)' }}>→ publishing v1.4.0 ................ ok</span>{'\n'}
+<span style={{ color: 'var(--accent)' }}>✓</span> shipped to 8 regions · 142ms{'\n\n'}
+<span style={{ color: 'var(--accent)' }}>$</span> mjs status{'\n'}
+<span style={{ color: 'var(--fg-2)' }}>  SYS.01 utility ........ </span><span style={{ color: 'var(--accent)' }}>● shipped</span>{'\n'}
+<span style={{ color: 'var(--fg-2)' }}>  SYS.02 ai ............. </span><span style={{ color: 'var(--warn, #e9c46a)' }}>● building</span>{'\n'}
+<span style={{ color: 'var(--fg-2)' }}>  SYS.03 identity ....... </span><span style={{ color: 'var(--warn, #e9c46a)' }}>● building</span>{'\n'}
+<span style={{ color: 'var(--fg-2)' }}>  SYS.04 platform ....... </span><span style={{ color: 'var(--mute)' }}>○ planned</span>
+      </pre>
+    </div>
+  );
+}
+
+function Hero({ heroLineIdx }) {
+  const line = HERO_LINES[heroLineIdx] || HERO_LINES[0];
+  return (
+    <section style={{ position: 'relative', paddingTop: 96, paddingBottom: 80, zIndex: 1 }}>
+      <div style={{ maxWidth: 'var(--container)', margin: '0 auto', padding: '0 32px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 32, flexWrap: 'wrap' }}>
+          <span className="eyebrow">{line.kicker}</span>
+          <span className="chip live mono"><span className="dot" /> v0.4.2 · shipping weekly</span>
+        </div>
+
+        <h1 style={{ maxWidth: 1120 }}>
+          {line.main}{' '}
+          <span style={{ fontStyle: 'italic', fontWeight: 400 }}>
+            <span style={{ backgroundImage: 'linear-gradient(transparent 78%, var(--accent-3) 78%)', paddingBottom: 2 }}>
+              {line.accentSuffix}
+            </span>
+          </span>
+        </h1>
+
+        <p style={{ fontSize: 18, color: 'var(--mute)', maxWidth: 640, marginTop: 28, lineHeight: 1.55 }}>
+          mjasrar is a software platform — a growing suite of utility and AI tools
+          built by an indie founder. One identity, one interface, dozens of small,
+          sharp products that compose into a real workflow.
+        </p>
+
+        <div style={{ display: 'flex', gap: 12, marginTop: 36, flexWrap: 'wrap' }}>
+          <button className="btn primary" onClick={() => document.getElementById('tools')?.scrollIntoView({ behavior: 'smooth' })}>
+            Explore tools <Ico.arrow />
+          </button>
+          <button className="btn" onClick={() => document.getElementById('ecosystem')?.scrollIntoView({ behavior: 'smooth' })}>
+            View ecosystem
+          </button>
+          <button className="btn" onClick={() => document.getElementById('founder')?.scrollIntoView({ behavior: 'smooth' })}>
+            About founder
+          </button>
+        </div>
+
+        <div style={{ display: 'flex', gap: 28, marginTop: 56, flexWrap: 'wrap', paddingTop: 28, borderTop: '1px solid var(--line)' }}>
+          {[
+            { k: 'Founder',        v: 'mjasrar · CS, FAST NUCES'   },
+            { k: 'Active modules', v: '24 tools across 4 systems'     },
+            { k: 'Build cadence',  v: 'Weekly releases · public log'  },
+            { k: 'Privacy posture',v: 'Local-first, on-device AI'     },
+          ].map(({ k, v }) => (
+            <div key={k} style={{ display: 'flex', flexDirection: 'column', gap: 4, minWidth: 140 }}>
+              <span style={{ fontFamily: '"Geist Mono", monospace', fontSize: 11, color: 'var(--mute)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>{k}</span>
+              <span style={{ fontSize: 14 }}>{v}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="hero-preview" style={{ position: 'absolute', right: 'max(32px, calc((100vw - var(--container)) / 2 + 32px))', top: 120, width: 360, transform: 'rotate(1.4deg)', pointerEvents: 'none', display: 'none' }}>
+        <MiniTerminal />
+      </div>
+      <style>{`@media(min-width:1180px){.hero-preview{display:block!important}}`}</style>
+    </section>
+  );
+}
+window.Hero = Hero;
+  </script>
+
+  <!-- tools -->
+  <script type="text/babel">
+function ToolCard({ t }) {
+  const [hover, setHover] = React.useState(false);
+  const Icon = Ico[t.icon] || Ico.spark;
+  return (
+    <div className="panel hover"
+      onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}
+      style={{ padding: 18, position: 'relative', borderColor: hover ? 'var(--line-2)' : 'var(--line)', background: hover ? 'var(--surface-2)' : 'var(--surface)', transition: 'border-color 160ms ease, background 160ms ease' }}
+    >
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 14 }}>
+        <div style={{ width: 36, height: 36, borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(255,255,255,0.04)', border: '1px solid var(--line)', color: t.ai ? 'var(--accent)' : 'var(--fg-2)' }}>
+          <Icon />
+        </div>
+        <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+          {t.ai && <span className="chip mono" style={{ height: 20, padding: '0 7px', fontSize: 10, background: 'var(--accent-2)', color: 'var(--accent)', borderColor: 'transparent' }}>AI</span>}
+          {t.hot && <span className="chip mono" style={{ height: 20, padding: '0 7px', fontSize: 10 }}><Ico.bolt /> hot</span>}
+        </div>
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+        <h3 style={{ fontSize: 15.5, fontWeight: 500 }}>{t.name}</h3>
+        <p style={{ fontSize: 13, color: 'var(--mute)' }}>{t.desc}</p>
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 16, paddingTop: 14, borderTop: '1px solid var(--line)' }}>
+        <span className="mono" style={{ fontSize: 11, color: 'var(--mute-2)' }}>
+          v{t.v} · <span style={{ color: t.state === 'stable' ? 'var(--accent)' : 'var(--warn)' }}>● {t.state}</span>
+        </span>
+        <span style={{ color: hover ? 'var(--fg)' : 'var(--mute)', display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
+          Open <Ico.arrowUR />
+        </span>
+      </div>
+    </div>
+  );
+}
+
+function ToolsSection() {
+  const [cat, setCat] = React.useState('all');
+  const [q, setQ] = React.useState('');
+  const filtered = TOOLS.filter((t) => {
+    if (cat !== 'all' && t.cat !== cat) return false;
+    if (q && !(t.name + ' ' + t.desc).toLowerCase().includes(q.toLowerCase())) return false;
+    return true;
+  });
+
+  return (
+    <section id="tools" className="section">
+      <div className="container">
+        <div className="section-head reveal">
+          <span className="eyebrow">02 — Tools</span>
+          <h2>A marketplace for small, sharp utilities.</h2>
+          <p className="lead">Twenty-four tools across PDF, image, text, AI and developer workflows — each one a focused module inside a single, consistent product surface.</p>
+        </div>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24, flexWrap: 'wrap', padding: 8, border: '1px solid var(--line)', borderRadius: 14, background: 'rgba(255,255,255,0.015)' }} className="reveal">
+          <div style={{ flex: 1, minWidth: 240, display: 'flex', alignItems: 'center', gap: 8, padding: '0 12px', height: 36, borderRadius: 8, background: 'rgba(255,255,255,0.03)', border: '1px solid var(--line)', color: 'var(--fg-2)' }}>
+            <Ico.search />
+            <input
+              style={{ flex: 1, background: 'transparent', border: 0, outline: 0, color: 'var(--fg)', fontFamily: 'inherit', fontSize: 13 }}
+              placeholder='Search tools — try "compress", "regex", "translate"…'
+              value={q} onChange={(e) => setQ(e.target.value)}
+            />
+            <span className="kbd">⌘</span>
+            <span className="kbd">K</span>
+          </div>
+          <div style={{ display: 'flex', gap: 4, padding: 2, flexWrap: 'wrap' }}>
+            {TOOL_CATEGORIES.map((c) => (
+              <button key={c.id} onClick={() => setCat(c.id)}
+                style={{ height: 32, padding: '0 12px', display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, borderRadius: 6, cursor: 'default', border: cat === c.id ? '1px solid var(--line-2)' : '1px solid transparent', color: cat === c.id ? 'var(--fg)' : 'var(--fg-2)', background: cat === c.id ? 'rgba(255,255,255,0.06)' : 'transparent', font: 'inherit' }}>
+                {c.label} <span style={{ fontFamily: '"Geist Mono", monospace', fontSize: 10.5, color: 'var(--mute)' }}>{c.count}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div style={{ display: 'grid', gap: 14, gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))' }} className="reveal">
+          {filtered.map((t) => <ToolCard key={t.id} t={t} />)}
+          {filtered.length === 0 && (
+            <div style={{ padding: 40, textAlign: 'center', color: 'var(--mute)', gridColumn: '1 / -1' }}>No matches. Try clearing the filter.</div>
+          )}
+        </div>
+      </div>
+    </section>
+  );
+}
+window.ToolsSection = ToolsSection;
+  </script>
+
+  <!-- live-tool -->
+  <script type="text/babel">
+const SAMPLE_TEXT = `mjasrar is an indie-built software platform that bundles small utility tools into one cohesive product surface. Each tool has the same shape: input on the left, output on the right, with optional AI enhancement that runs as a quiet layer underneath. The goal is to build a real software ecosystem one module at a time — not a portfolio, not a side project, but a serious tools platform that grows every week.`;
+const SAMPLE_JSON = `{"product":"mjasrar","modules":[{"id":"pdf","status":"shipped"},{"id":"ai","status":"building"}],"version":"0.4.2","privacy":"local-first"}`;
+
+const OPS = [
+  { id: 'clean',     label: 'Clean text',          ai: false, kind: 'text' },
+  { id: 'format',    label: 'Format JSON',          ai: false, kind: 'json' },
+  { id: 'base64',    label: 'Base64',               ai: false, kind: 'text' },
+  { id: 'wc',        label: 'Word count',           ai: false, kind: 'text' },
+  { id: 'summarize', label: 'Summarize',            ai: true,  kind: 'text' },
+  { id: 'rewrite',   label: 'Rewrite — concise',    ai: true,  kind: 'text' },
+  { id: 'translate', label: 'Translate → FR',       ai: true,  kind: 'text' },
+];
+
+function runOp(opId, input) {
+  switch (opId) {
+    case 'clean': return input.replace(/[ \t]+/g, ' ').replace(/[ \t]+\n/g, '\n').replace(/\n{3,}/g, '\n\n').trim();
+    case 'format': try { return JSON.stringify(JSON.parse(input), null, 2); } catch (e) { return '// invalid JSON — ' + (e.message || 'parse error') + '\n' + input; }
+    case 'base64': try { return btoa(unescape(encodeURIComponent(input))); } catch (e) { return '// could not encode'; }
+    case 'wc': {
+      const words = (input.trim().match(/\S+/g) || []).length;
+      const chars = input.length, lines = input.split('\n').length, sentences = (input.match(/[.!?]+/g) || []).length;
+      return `words ........... ${words}\ncharacters ...... ${chars}\nlines ........... ${lines}\nsentences ....... ${sentences}\nread time ....... ~${Math.max(1, Math.round(words / 220))} min`;
+    }
+    case 'summarize': return `→ mjasrar bundles small utility tools into one product surface\n→ Each tool: input · process · output. AI is an optional quiet layer\n→ Goal: build a real platform incrementally, weekly releases\n\n— summary generated locally · ai-haiku-4-5 · 312ms`;
+    case 'rewrite': return `mjasrar is one product surface for many small tools. Same shape every time: input, output, optional AI underneath. The plan is a real platform — built weekly, module by module.`;
+    case 'translate': return `mjasrar est une plateforme logicielle développée en solo qui regroupe de petits outils utilitaires au sein d'une même surface produit cohérente. Chaque outil a la même structure : entrée à gauche, sortie à droite, avec une couche d'IA optionnelle. L'objectif est de construire un véritable écosystème logiciel, module par module.`;
+    default: return input;
+  }
+}
+
+function LiveTool() {
+  const [opId, setOpId] = React.useState('summarize');
+  const op = OPS.find((o) => o.id === opId);
+  const [input, setInput] = React.useState(SAMPLE_TEXT);
+  const [output, setOutput] = React.useState('');
+  const [running, setRunning] = React.useState(false);
+  const [aiToggle, setAiToggle] = React.useState(true);
+
+  React.useEffect(() => {
+    if (op.kind === 'json' && !input.trim().startsWith('{')) setInput(SAMPLE_JSON);
+    if (op.kind === 'text' && input.trim().startsWith('{') && input.length < 200) setInput(SAMPLE_TEXT);
+  }, [opId]);
+
+  React.useEffect(() => {
+    setRunning(true);
+    const delay = op.ai && aiToggle ? 520 : 120;
+    const t = setTimeout(() => {
+      setOutput(op.ai && !aiToggle ? '// AI mode disabled — toggle on to enable ' + op.label.toLowerCase() + '.' : runOp(op.id, input));
+      setRunning(false);
+    }, delay);
+    return () => clearTimeout(t);
+  }, [input, opId, aiToggle]);
+
+  const tb = { height: 28, padding: '0 10px', fontSize: 12, borderRadius: 7, cursor: 'default', display: 'inline-flex', alignItems: 'center', gap: 6, fontFamily: '"Geist Mono", monospace' };
+
+  return (
+    <div style={{ border: '1px solid var(--line)', borderRadius: 18, background: 'linear-gradient(180deg, var(--surface) 0%, #0e0f12 100%)', overflow: 'hidden' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px', borderBottom: '1px solid var(--line)', background: 'rgba(255,255,255,0.015)' }}>
+        <span style={{ width: 22, height: 22, borderRadius: 6, background: 'linear-gradient(135deg, var(--accent), oklch(0.7 0.18 165))', color: '#0a0a0b', fontFamily: '"Geist Mono", monospace', fontWeight: 700, fontSize: 11, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>m</span>
+        <div style={{ fontFamily: '"Geist Mono", monospace', fontSize: 12, color: 'var(--mute)', display: 'flex', alignItems: 'center', gap: 8 }}>
+          <span style={{ color: 'var(--fg)' }}>Workbench</span>
+          <span style={{ color: 'var(--mute-2)' }}>/</span>
+          <span>{op.label}</span>
+        </div>
+        <div style={{ flex: 1 }} />
+        <button onClick={() => setAiToggle(!aiToggle)}
+          style={{ ...tb, border: '1px solid ' + (aiToggle ? 'var(--accent-3)' : 'var(--line)'), background: aiToggle ? 'var(--accent-2)' : 'transparent', color: aiToggle ? 'var(--accent)' : 'var(--fg-2)' }}>
+          <Ico.spark /> AI {aiToggle ? 'on' : 'off'}
+        </button>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', minHeight: 360 }} className="lt-cols">
+        <div style={{ padding: 18, display: 'flex', flexDirection: 'column', gap: 10, borderRight: '1px solid var(--line)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontFamily: '"Geist Mono", monospace', fontSize: 11, color: 'var(--mute)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+              <span>Input</span>
+              <span style={{ color: 'var(--mute-2)' }}>{input.length} chars</span>
+            </div>
+            <div style={{ display: 'flex', gap: 6 }}>
+              <button className="btn" style={{ height: 26, padding: '0 8px', fontSize: 11.5 }} onClick={() => setInput(op.kind === 'json' ? SAMPLE_JSON : SAMPLE_TEXT)}>Reset</button>
+              <button className="btn" style={{ height: 26, padding: '0 8px', fontSize: 11.5 }} onClick={() => setInput('')}>Clear</button>
+            </div>
+          </div>
+          <textarea style={{ flex: 1, minHeight: 260, background: 'rgba(0,0,0,0.25)', border: '1px solid var(--line)', borderRadius: 10, padding: 14, color: 'var(--fg)', fontFamily: '"Geist Mono", monospace', fontSize: 12.5, lineHeight: 1.6, resize: 'none', outline: 0 }}
+            value={input} onChange={(e) => setInput(e.target.value)} spellCheck={false} />
+        </div>
+
+        <div style={{ padding: 18, display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontFamily: '"Geist Mono", monospace', fontSize: 11, color: 'var(--mute)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+              <span>Output</span>
+              {op.ai && aiToggle && <span className="chip mono" style={{ height: 18, padding: '0 6px', fontSize: 10, background: 'var(--accent-2)', color: 'var(--accent)', borderColor: 'transparent' }}>AI</span>}
+              {running && <span className="mono" style={{ color: 'var(--accent)' }}>● running</span>}
+            </div>
+            <div style={{ display: 'flex', gap: 6 }}>
+              <button className="btn" style={{ height: 26, padding: '0 8px', fontSize: 11.5 }} onClick={() => navigator.clipboard?.writeText(output)}><Ico.clip /> Copy</button>
+              <button className="btn" style={{ height: 26, padding: '0 8px', fontSize: 11.5 }}><Ico.download /> Save</button>
+            </div>
+          </div>
+          <div style={{ flex: 1, minHeight: 260, background: 'rgba(0,0,0,0.25)', border: '1px solid var(--line)', borderRadius: 10, padding: 14, color: 'var(--fg)', fontFamily: '"Geist Mono", monospace', fontSize: 12.5, lineHeight: 1.6, whiteSpace: 'pre-wrap', overflow: 'auto' }}>{output || ' '}</div>
+        </div>
+      </div>
+
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, padding: '12px 18px', borderTop: '1px solid var(--line)', background: 'rgba(255,255,255,0.012)' }}>
+        <span className="mono" style={{ fontSize: 11, color: 'var(--mute-2)', marginRight: 8, alignSelf: 'center' }}>OPS →</span>
+        {OPS.map((o) => (
+          <button key={o.id} onClick={() => setOpId(o.id)}
+            style={{ height: 28, padding: '0 10px', fontSize: 12, border: '1px solid ' + (opId === o.id ? (o.ai ? 'var(--accent-3)' : 'var(--line-3)') : 'var(--line)'), background: opId === o.id ? (o.ai ? 'var(--accent-2)' : 'rgba(255,255,255,0.05)') : 'transparent', color: opId === o.id && o.ai ? 'var(--accent)' : (opId === o.id ? 'var(--fg)' : 'var(--fg-2)'), borderRadius: 7, cursor: 'default', display: 'inline-flex', alignItems: 'center', gap: 6, fontFamily: '"Geist Mono", monospace', font: 'inherit', transition: 'all 120ms ease' }}>
+            {o.ai && <Ico.spark />}{o.label}
+          </button>
+        ))}
+      </div>
+
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 16px', borderTop: '1px solid var(--line)', fontFamily: '"Geist Mono", monospace', fontSize: 11, color: 'var(--mute)' }}>
+        <span>Local-first · runs in this tab · zero data leaves your browser</span>
+        <span>{op.ai ? 'haiku-4-5 · on-device routing' : 'wasm · 4kb runtime'}</span>
+      </div>
+      <style>{`@media(max-width:880px){.lt-cols{grid-template-columns:1fr!important}.lt-cols>div:first-child{border-right:0!important;border-bottom:1px solid var(--line)}}`}</style>
+    </div>
+  );
+}
+
+function LiveToolSection() {
+  return (
+    <section className="section" id="workbench" style={{ paddingTop: 0 }}>
+      <div className="container">
+        <div className="section-head reveal" style={{ marginBottom: 32 }}>
+          <span className="eyebrow">02b — Live demo</span>
+          <h2>Every tool has the same shape.</h2>
+          <p className="lead">Input · operation · output. AI is an optional layer on top — same interface, quieter posture. This isn't a screenshot; type into the box.</p>
+        </div>
+        <div className="reveal"><LiveTool /></div>
+      </div>
+    </section>
+  );
+}
+window.LiveToolSection = LiveToolSection;
+  </script>
+
+  <!-- ai-layer -->
+  <script type="text/babel">
+const AI_PAIRS = [
+  { tool: 'PDF · Extract Text',  before: 'raw text dump\nbroken lines\nheadersmushed\ntogether',       after: '# Q4 Report\n\nClean prose, layout-aware.\nHeadings preserved.', note: 'Layout-aware extraction' },
+  { tool: 'Image · Smart Crop',  before: 'centered crop\nsubject cut off',                              after: 'subject-aware\nframed perfectly',                             note: 'AI picks the focal point' },
+  { tool: 'Text · Rewrite',      before: 'In light of the fact that\nwe have not yet been able\nto ascertain…', after: 'We don’t know yet — here’s\nwhat we do know.', note: 'Tone shift, length cut' },
+];
+
+function AILayer() {
+  return (
+    <section id="ai" className="section">
+      <div className="container">
+        <div className="section-head reveal">
+          <span className="eyebrow">03 — AI Layer</span>
+          <h2>AI as a quiet upgrade, not a separate product.</h2>
+          <p className="lead">Every tool has an AI mode. Same input, same output, same shape — just sharper results. No new interface to learn, no "chat with my PDF" trope. Toggle it on, toggle it off.</p>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 14 }}>
+          {AI_PAIRS.map((p, i) => (
+            <div key={i} className="panel reveal" style={{ padding: 22, display: 'flex', flexDirection: 'column', gap: 14, minHeight: 220 }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontFamily: '"Geist Mono", monospace', fontSize: 11, color: 'var(--mute)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+                <span>{p.tool}</span>
+                <span className="chip mono" style={{ height: 20, padding: '0 7px', fontSize: 10, background: 'var(--accent-2)', color: 'var(--accent)', borderColor: 'transparent' }}>AI on</span>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 14px 1fr', alignItems: 'stretch', border: '1px solid var(--line)', borderRadius: 10, overflow: 'hidden', background: 'rgba(0,0,0,0.2)' }}>
+                <div style={{ padding: '12px 14px', fontFamily: '"Geist Mono", monospace', fontSize: 11.5, color: 'var(--fg-2)', lineHeight: 1.55, minHeight: 72 }}>
+                  <div style={{ color: 'var(--mute-2)', marginBottom: 6, fontSize: 10, letterSpacing: '0.08em' }}>OFF</div>
+                  {p.before}
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: '"Geist Mono", monospace', fontSize: 11, color: 'var(--accent)', background: 'rgba(0,0,0,0.3)' }}>→</div>
+                <div style={{ padding: '12px 14px', fontFamily: '"Geist Mono", monospace', fontSize: 11.5, color: 'var(--fg-2)', lineHeight: 1.55, minHeight: 72, borderLeft: '1px solid var(--line)' }}>
+                  <div style={{ color: 'var(--accent)', marginBottom: 6, fontSize: 10, letterSpacing: '0.08em' }}>ON</div>
+                  {p.after}
+                </div>
+              </div>
+              <p style={{ fontSize: 13, color: 'var(--mute)', marginTop: 'auto' }}>{p.note}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+window.AILayer = AILayer;
+  </script>
+
+  <!-- ecosystem -->
+  <script type="text/babel">
+const STATUS = {
+  shipped:  { dot: 'var(--accent)',          label: 'shipped',  text: 'var(--accent)'          },
+  building: { dot: 'oklch(0.82 0.14 75)',    label: 'building', text: 'oklch(0.82 0.14 75)'    },
+  planned:  { dot: 'var(--mute-2)',           label: 'planned',  text: 'var(--mute)'             },
+};
+
+function StatusDot({ kind }) {
+  const s = STATUS[kind];
+  return <span style={{ width: 8, height: 8, borderRadius: '50%', background: s.dot, boxShadow: kind !== 'planned' ? `0 0 0 3px ${s.dot}22` : 'none', display: 'inline-block' }} />;
+}
+
+function ModuleRow({ m }) {
+  const s = STATUS[m.status];
+  const [hover, setHover] = React.useState(false);
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: '20px 1fr auto auto', alignItems: 'center', gap: 12, padding: '11px 10px', borderRadius: 8, background: hover ? 'rgba(255,255,255,0.03)' : 'transparent', transition: 'background 120ms ease' }}
+      onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
+      <StatusDot kind={m.status} />
+      <span style={{ fontSize: 13.5, color: m.status === 'planned' ? 'var(--mute)' : 'var(--fg)' }}>{m.name}</span>
+      <span style={{ fontFamily: '"Geist Mono", monospace', fontSize: 11, color: 'var(--mute-2)' }}>v{m.v}</span>
+      <span style={{ fontFamily: '"Geist Mono", monospace', fontSize: 11, letterSpacing: '0.04em', color: s.text, minWidth: 80, textAlign: 'right' }}>{s.label}</span>
+    </div>
+  );
+}
+
+function SystemCard({ sys }) {
+  const shipped = sys.modules.filter(m => m.status === 'shipped').length;
+  const building = sys.modules.filter(m => m.status === 'building').length;
+  return (
+    <div className="panel reveal" style={{ overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ padding: '20px 22px 16px', borderBottom: '1px solid var(--line)', background: 'linear-gradient(180deg, rgba(255,255,255,0.025), transparent)' }}>
+        <div style={{ fontFamily: '"Geist Mono", monospace', fontSize: 11, color: 'var(--mute)', letterSpacing: '0.08em', marginBottom: 10, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <span>{sys.code}</span>
+          <span style={{ display: 'inline-flex', gap: 8 }}>
+            <span style={{ color: 'var(--accent)' }}>● {shipped}</span>
+            <span style={{ color: 'oklch(0.82 0.14 75)' }}>● {building}</span>
+            <span>{sys.modules.length} total</span>
+          </span>
+        </div>
+        <div style={{ fontSize: 19, fontWeight: 500, letterSpacing: '-0.015em', marginBottom: 6 }}>{sys.name}</div>
+        <div style={{ fontSize: 13.5, color: 'var(--mute)', lineHeight: 1.55 }}>{sys.blurb}</div>
+      </div>
+      <div style={{ padding: 14, display: 'flex', flexDirection: 'column', gap: 2 }}>
+        {sys.modules.map((m, i) => <ModuleRow key={i} m={m} />)}
+      </div>
+      <div style={{ padding: '12px 18px', borderTop: '1px solid var(--line)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontFamily: '"Geist Mono", monospace', fontSize: 11, color: 'var(--mute)' }}>
+        <span>{sys.id}.mjasrar</span>
+        <span style={{ display: 'inline-flex', gap: 6, alignItems: 'center', color: 'var(--fg-2)' }}>Open system <Ico.arrowUR /></span>
+      </div>
+    </div>
+  );
+}
+
+function Ecosystem() {
+  return (
+    <section id="ecosystem" className="section" style={{ background: 'linear-gradient(180deg, transparent, rgba(255,255,255,0.012) 30%, transparent)' }}>
+      <div className="container">
+        <div className="section-head reveal">
+          <span className="eyebrow">04 — Ecosystem</span>
+          <h2>A platform, built in public, one module at a time.</h2>
+          <p className="lead">Four systems. Twenty-four modules shipped. A roadmap that's visible and honest — what's live, what's wet paint, what's queued.</p>
+        </div>
+        <div style={{ display: 'flex', gap: 18, flexWrap: 'wrap', alignItems: 'center', marginBottom: 36, fontFamily: '"Geist Mono", monospace', fontSize: 11.5, color: 'var(--mute)' }} className="reveal">
+          <span>STATUS LEGEND →</span>
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 7 }}><StatusDot kind="shipped" /> shipped · live in production</span>
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 7 }}><StatusDot kind="building" /> building · in active development</span>
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 7 }}><StatusDot kind="planned" /> planned · queued, not started</span>
+        </div>
+        <div style={{ display: 'grid', gap: 14, gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))' }}>
+          {ECOSYSTEM.systems.map((sys) => <SystemCard key={sys.id} sys={sys} />)}
+        </div>
+      </div>
+    </section>
+  );
+}
+window.Ecosystem = Ecosystem;
+  </script>
+
+  <!-- projects -->
+  <script type="text/babel">
+function ProjectRow({ p, i }) {
+  const [hover, setHover] = React.useState(false);
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: '80px 1fr 100px 18px', alignItems: 'center', gap: 18, padding: '20px 22px', cursor: 'default', background: hover ? 'rgba(255,255,255,0.025)' : 'transparent', transition: 'background 140ms ease', ...(i > 0 ? { borderTop: '1px solid var(--line)' } : {}) }}
+      onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
+      <span style={{ fontFamily: '"Geist Mono", monospace', fontSize: 11, color: 'var(--mute)' }}>{p.code}</span>
+      <div>
+        <div style={{ fontSize: 16, fontWeight: 500, marginBottom: 2 }}>{p.name}</div>
+        <div style={{ fontSize: 13, color: 'var(--mute)' }}>{p.desc}</div>
+      </div>
+      <span style={{ fontFamily: '"Geist Mono", monospace', fontSize: 10.5, color: 'var(--fg-2)', padding: '3px 9px', border: '1px solid var(--line-2)', borderRadius: 999 }}>{p.tag}</span>
+      <span style={{ color: hover ? 'var(--fg)' : 'var(--mute)' }}><Ico.arrowUR /></span>
+    </div>
+  );
+}
+
+function Projects() {
+  return (
+    <section id="projects" className="section">
+      <div className="container">
+        <div className="section-head reveal">
+          <span className="eyebrow">05 — Past modules</span>
+          <h2>Earlier work — the modules this platform is built on.</h2>
+          <p className="lead">Not a resume. Components and infrastructure that became foundations for what's running today.</p>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: 56, alignItems: 'flex-start' }} className="proj-two">
+          <div style={{ border: '1px solid var(--line)', borderRadius: 14, overflow: 'hidden' }} className="reveal">
+            {PROJECTS.map((p, i) => <ProjectRow key={p.id} p={p} i={i} />)}
+          </div>
+          <div id="founder" className="panel reveal" style={{ padding: 28, display: 'flex', flexDirection: 'column', gap: 18 }}>
+            <div style={{ width: 56, height: 56, borderRadius: 14, background: 'linear-gradient(135deg, var(--accent), oklch(0.7 0.18 165))', color: '#0a0a0b', fontWeight: 700, fontSize: 22, fontFamily: '"Geist Mono", monospace', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>m</div>
+            <div>
+              <div style={{ fontSize: 18, fontWeight: 500, marginBottom: 2 }}>M. Jasrar</div>
+              <div style={{ fontSize: 13, color: 'var(--mute)' }}>Founder · solo builder</div>
+            </div>
+            <p style={{ fontSize: 14, color: 'var(--fg-2)', lineHeight: 1.6 }}>
+              Computer Science, FAST NUCES. Building mjasrar as a long-running platform — tools-first, AI-enhanced, local-first. Shipping weekly, in public.
+            </p>
+            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+              <button className="btn" style={{ height: 32, padding: '0 10px', fontSize: 12 }}><Ico.github /> GitHub</button>
+              <button className="btn" style={{ height: 32, padding: '0 10px', fontSize: 12 }}>Read changelog <Ico.arrowUR /></button>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginTop: 4, paddingTop: 18, borderTop: '1px solid var(--line)' }}>
+              <div>
+                <div className="mono" style={{ fontSize: 10.5, color: 'var(--mute)', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 4 }}>Building since</div>
+                <div style={{ fontSize: 14 }}>Jul 2024</div>
+              </div>
+              <div>
+                <div className="mono" style={{ fontSize: 10.5, color: 'var(--mute)', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 4 }}>Releases shipped</div>
+                <div style={{ fontSize: 14 }}>87 · weekly cadence</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <style>{`@media(max-width:960px){.proj-two{grid-template-columns:1fr!important}}`}</style>
+      </div>
+    </section>
+  );
+}
+window.Projects = Projects;
+  </script>
+
+  <!-- footer -->
+  <script type="text/babel">
+function FinalCTA() {
+  return (
+    <section className="section" style={{ paddingBottom: 60 }}>
+      <div className="container">
+        <div className="panel reveal" style={{ padding: 60, textAlign: 'center', background: 'radial-gradient(ellipse at top, var(--accent-2), transparent 60%), var(--surface)', border: '1px solid var(--line-2)' }}>
+          <span className="eyebrow" style={{ justifyContent: 'center', margin: '0 auto 24px', display: 'inline-flex' }}>06 — Get started</span>
+          <h2 style={{ maxWidth: 720, margin: '0 auto 16px' }}>
+            One identity. One interface.{' '}
+            <span style={{ fontStyle: 'italic', color: 'var(--fg-2)' }}>A growing platform.</span>
+          </h2>
+          <p className="lead" style={{ maxWidth: 540, margin: '0 auto 32px', color: 'var(--mute)' }}>
+            Open the workbench and try any tool. No signup. Your data never leaves the tab.
+          </p>
+          <div style={{ display: 'inline-flex', gap: 12, flexWrap: 'wrap', justifyContent: 'center' }}>
+            <button className="btn primary" style={{ height: 44, padding: '0 20px', fontSize: 14 }}>Open the app <Ico.arrow /></button>
+            <button className="btn" style={{ height: 44, padding: '0 20px', fontSize: 14 }}><Ico.github /> Star on GitHub</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Footer() {
+  return (
+    <footer style={{ borderTop: '1px solid var(--line)', padding: '64px 0 40px', background: 'var(--bg-deep)', position: 'relative', zIndex: 1 }}>
+      <div className="container">
+        <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr 1fr 1fr', gap: 56, marginBottom: 56 }} className="foot-grid">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 }}>
+              <div style={{ width: 26, height: 26, borderRadius: 7, background: 'linear-gradient(135deg, var(--accent), oklch(0.7 0.18 165))', color: '#0a0a0b', fontWeight: 700, fontSize: 13, fontFamily: '"Geist Mono", monospace', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>m</div>
+              <span style={{ fontSize: 15, fontWeight: 600 }}>mjasrar</span>
+            </div>
+            <p style={{ fontSize: 13.5, color: 'var(--mute)', maxWidth: 320 }}>A growing software platform of utility and AI tools, built by one founder. Shipping weekly.</p>
+            <div style={{ display: 'flex', gap: 6, marginTop: 10 }}>
+              <span className="chip live mono"><span className="dot" /> all systems · 99.98%</span>
+            </div>
+          </div>
+          {[
+            { hd: 'Product',  links: ['Tools', 'Workbench', 'AI layer', 'Pricing', 'Changelog'] },
+            { hd: 'Platform', links: ['Ecosystem', 'Roadmap', 'API · soon', 'CLI · soon', 'Status'] },
+            { hd: 'Founder',  links: ['About', 'Notes', 'Builders log', 'Contact', 'Twitter / X'] },
+          ].map(({ hd, links }) => (
+            <div key={hd} style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+              <div style={{ fontFamily: '"Geist Mono", monospace', fontSize: 11, color: 'var(--mute)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 4 }}>{hd}</div>
+              {links.map((l) => <a key={l} style={{ fontSize: 13.5, color: 'var(--fg-2)', cursor: 'default' }}>{l}</a>)}
+            </div>
+          ))}
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 28, borderTop: '1px solid var(--line)', fontFamily: '"Geist Mono", monospace', fontSize: 11.5, color: 'var(--mute)', flexWrap: 'wrap', gap: 12 }}>
+          <span>© 2026 mjasrar · local-first by default</span>
+          <span>v0.4.2 · last shipped {new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
+        </div>
+      </div>
+      <style>{`@media(max-width:880px){.foot-grid{grid-template-columns:1fr 1fr!important;gap:32px!important}}`}</style>
+    </footer>
+  );
+}
+window.FinalCTA = FinalCTA;
+window.Footer = Footer;
+  </script>
+
+  <!-- app -->
+  <script type="text/babel">
+const ACCENT_OPTIONS = {
+  phosphor: { primary: 'oklch(0.86 0.17 138)', label: 'Phosphor lime' },
+  amber:    { primary: 'oklch(0.82 0.16 75)',  label: 'Solar amber'   },
+  iris:     { primary: 'oklch(0.78 0.16 285)', label: 'Iris violet'   },
+  ember:    { primary: 'oklch(0.74 0.18 25)',  label: 'Ember red'     },
+};
+
+function App() {
+  const [t, setTweak] = useTweaks(window.TWEAK_DEFAULTS);
+
+  React.useEffect(() => {
+    const a = ACCENT_OPTIONS[t.accent] || ACCENT_OPTIONS.phosphor;
+    const root = document.documentElement;
+    root.style.setProperty('--accent', a.primary);
+    // oklch(L C H) → oklch(L C H / alpha)
+    const toAlpha = (c, a) => c.replace(/\)$/, ` / ${a})`);
+    root.style.setProperty('--accent-2', toAlpha(a.primary, '0.14'));
+    root.style.setProperty('--accent-3', toAlpha(a.primary, '0.32'));
+  }, [t.accent]);
+
+  React.useEffect(() => { document.body.setAttribute('data-density', t.density); }, [t.density]);
+
+  React.useEffect(() => {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: 0.1, rootMargin: '0px 0px -8% 0px' });
+    document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, []);
+
+  return (
+    <>
+      <Nav />
+      <Hero heroLineIdx={t.heroLine} />
+      <ToolsSection />
+      {t.showLiveTool && <LiveToolSection />}
+      <AILayer />
+      <Ecosystem />
+      <Projects />
+      <FinalCTA />
+      <Footer />
+
+      <TweaksPanel title="Tweaks">
+        <TweakSection label="Brand" />
+        <TweakColor
+          label="Accent"
+          value={ACCENT_OPTIONS[t.accent]?.primary || ACCENT_OPTIONS.phosphor.primary}
+          options={Object.values(ACCENT_OPTIONS).map((a) => a.primary)}
+          onChange={(v) => {
+            const key = Object.keys(ACCENT_OPTIONS).find(k => ACCENT_OPTIONS[k].primary === v);
+            if (key) setTweak('accent', key);
+          }}
+        />
+        <TweakSection label="Hero" />
+        <TweakSelect
+          label="Positioning line"
+          value={String(t.heroLine)}
+          options={[
+            { value: '0', label: 'Building systems' },
+            { value: '1', label: 'A growing ecosystem' },
+            { value: '2', label: 'AI-enhanced tooling' },
+          ]}
+          onChange={(v) => setTweak('heroLine', Number(v))}
+        />
+        <TweakSection label="Layout" />
+        <TweakRadio
+          label="Density"
+          value={t.density}
+          options={['compact', 'regular', 'comfy']}
+          onChange={(v) => setTweak('density', v)}
+        />
+        <TweakToggle
+          label="Live workbench"
+          value={t.showLiveTool}
+          onChange={(v) => setTweak('showLiveTool', v)}
+        />
+      </TweaksPanel>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+
+</body>
+</html>
