@@ -49,22 +49,6 @@ export default function OGImage() {
 
         {/* Top: brand */}
         <div style={{ display: "flex", alignItems: "center", gap: 14, position: "relative" }}>
-          <div
-            style={{
-              width: 36,
-              height: 36,
-              borderRadius: 10,
-              background: "linear-gradient(135deg, #a3e635, #4ade80)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              color: "#0a0a0b",
-              fontWeight: 800,
-              fontSize: 18,
-            }}
-          >
-            m
-          </div>
           <span style={{ color: "#ededed", fontWeight: 600, fontSize: 20, letterSpacing: "-0.01em" }}>
             mjasrar
           </span>

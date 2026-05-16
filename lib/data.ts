@@ -12,6 +12,8 @@ export interface Tool {
   ai: boolean;
   hot: boolean;
   v: string;
+  slug: string;
+  urlCat: string;
 }
 
 export interface ToolCategory {
@@ -66,30 +68,30 @@ export const TOOL_CATEGORIES: ToolCategory[] = [
 ];
 
 export const TOOLS: Tool[] = [
-  { id: "pdf-compress",  cat: "pdf",   icon: "pdf",   name: "Compress PDF",       desc: "Shrink documents up to 90%",          state: "stable", ai: false, hot: true,  v: "1.4.0" },
-  { id: "pdf-merge",     cat: "pdf",   icon: "pdf",   name: "Merge PDF",          desc: "Combine files, reorder, drag",         state: "stable", ai: false, hot: false, v: "1.2.1" },
-  { id: "pdf-split",     cat: "pdf",   icon: "pdf",   name: "Split PDF",          desc: "Extract pages or ranges",              state: "stable", ai: false, hot: false, v: "1.1.0" },
-  { id: "pdf-sign",      cat: "pdf",   icon: "pdf",   name: "Sign PDF",           desc: "Local signing, no upload",             state: "beta",   ai: false, hot: false, v: "0.6.2" },
-  { id: "pdf-extract",   cat: "pdf",   icon: "pdf",   name: "Extract Text",       desc: "Clean prose from any PDF",             state: "stable", ai: true,  hot: false, v: "2.0.0" },
-  { id: "pdf-translate", cat: "pdf",   icon: "pdf",   name: "Translate PDF",      desc: "Layout-preserving, 40+ languages",     state: "beta",   ai: true,  hot: true,  v: "0.4.1" },
-  { id: "img-compress",  cat: "image", icon: "image", name: "Compress Image",     desc: "WebP, AVIF, JPEG — visually lossless", state: "stable", ai: false, hot: false, v: "1.3.0" },
-  { id: "img-convert",   cat: "image", icon: "image", name: "Convert Format",     desc: "PNG · JPG · WebP · AVIF · HEIC",       state: "stable", ai: false, hot: false, v: "1.5.0" },
-  { id: "img-bgremove",  cat: "image", icon: "image", name: "Remove Background",  desc: "On-device, no upload",                 state: "stable", ai: true,  hot: true,  v: "1.0.0" },
-  { id: "img-upscale",   cat: "image", icon: "image", name: "Upscale 2×/4×",      desc: "Real-ESRGAN local pipeline",           state: "beta",   ai: true,  hot: false, v: "0.7.0" },
-  { id: "img-crop",      cat: "image", icon: "image", name: "Smart Crop",         desc: "Subject-aware framing",                state: "beta",   ai: true,  hot: false, v: "0.5.0" },
-  { id: "txt-summarize", cat: "text",  icon: "text",  name: "Summarize",          desc: "Long-form → essentials",               state: "stable", ai: true,  hot: false, v: "1.1.0" },
-  { id: "txt-rewrite",   cat: "text",  icon: "text",  name: "Rewrite",            desc: "Tone, length, audience",               state: "stable", ai: true,  hot: false, v: "1.2.0" },
-  { id: "txt-diff",      cat: "text",  icon: "text",  name: "Diff & Merge",       desc: "Side-by-side comparison",              state: "stable", ai: false, hot: false, v: "1.0.0" },
-  { id: "txt-format",    cat: "text",  icon: "text",  name: "Format / Clean",     desc: "Whitespace, casing, encoding",         state: "stable", ai: false, hot: false, v: "1.4.0" },
-  { id: "ai-chat",       cat: "ai",    icon: "spark", name: "Workbench",          desc: "Multi-model scratchpad",               state: "beta",   ai: true,  hot: true,  v: "0.4.2" },
-  { id: "ai-extract",    cat: "ai",    icon: "spark", name: "Structured Extract", desc: "Files → JSON, schema-aware",           state: "beta",   ai: true,  hot: false, v: "0.3.0" },
-  { id: "ai-vision",     cat: "ai",    icon: "spark", name: "Image Inspect",      desc: "Caption, OCR, tagging",                state: "beta",   ai: true,  hot: false, v: "0.2.0" },
-  { id: "ai-voice",      cat: "ai",    icon: "spark", name: "Transcribe",         desc: "Audio → text + speakers",              state: "beta",   ai: true,  hot: false, v: "0.5.0" },
-  { id: "ai-translate",  cat: "ai",    icon: "spark", name: "Translate",          desc: "40+ languages, context-aware",         state: "stable", ai: true,  hot: false, v: "1.0.0" },
-  { id: "dev-json",      cat: "dev",   icon: "code",  name: "JSON Toolkit",       desc: "Format, query, validate",              state: "stable", ai: false, hot: false, v: "1.2.0" },
-  { id: "dev-regex",     cat: "dev",   icon: "code",  name: "Regex Lab",          desc: "Build, test, explain",                 state: "stable", ai: true,  hot: false, v: "1.1.0" },
-  { id: "dev-uuid",      cat: "dev",   icon: "code",  name: "UUID / Hash",        desc: "Generate, decode, verify",             state: "stable", ai: false, hot: false, v: "1.0.0" },
-  { id: "dev-jwt",       cat: "dev",   icon: "code",  name: "JWT Inspector",      desc: "Decode, validate, sign",               state: "stable", ai: false, hot: false, v: "1.0.0" },
+  { id: "pdf-compress",  cat: "pdf",   icon: "pdf",   name: "Compress PDF",       desc: "Shrink documents up to 90%",          state: "stable", ai: false, hot: true,  v: "1.4.0", slug: "compress-pdf",       urlCat: "pdf"       },
+  { id: "pdf-merge",     cat: "pdf",   icon: "pdf",   name: "Merge PDF",          desc: "Combine files, reorder, drag",         state: "stable", ai: false, hot: false, v: "1.2.1", slug: "merge-pdf",          urlCat: "pdf"       },
+  { id: "pdf-split",     cat: "pdf",   icon: "pdf",   name: "Split PDF",          desc: "Extract pages or ranges",              state: "stable", ai: false, hot: false, v: "1.1.0", slug: "split-pdf",          urlCat: "pdf"       },
+  { id: "pdf-sign",      cat: "pdf",   icon: "pdf",   name: "Sign PDF",           desc: "Local signing, no upload",             state: "beta",   ai: false, hot: false, v: "0.6.2", slug: "sign-pdf",           urlCat: "pdf"       },
+  { id: "pdf-extract",   cat: "pdf",   icon: "pdf",   name: "Extract Text",       desc: "Clean prose from any PDF",             state: "stable", ai: true,  hot: false, v: "2.0.0", slug: "extract-text",       urlCat: "pdf"       },
+  { id: "pdf-translate", cat: "pdf",   icon: "pdf",   name: "Translate PDF",      desc: "Layout-preserving, 40+ languages",     state: "beta",   ai: true,  hot: true,  v: "0.4.1", slug: "translate-pdf",      urlCat: "pdf"       },
+  { id: "img-compress",  cat: "image", icon: "image", name: "Compress Image",     desc: "WebP, AVIF, JPEG — visually lossless", state: "stable", ai: false, hot: false, v: "1.3.0", slug: "compress-image",     urlCat: "image"     },
+  { id: "img-convert",   cat: "image", icon: "image", name: "Convert Format",     desc: "PNG · JPG · WebP · AVIF · HEIC",       state: "stable", ai: false, hot: false, v: "1.5.0", slug: "convert-format",     urlCat: "image"     },
+  { id: "img-bgremove",  cat: "image", icon: "image", name: "Remove Background",  desc: "On-device, no upload",                 state: "stable", ai: true,  hot: true,  v: "1.0.0", slug: "remove-background",  urlCat: "image"     },
+  { id: "img-upscale",   cat: "image", icon: "image", name: "Upscale 2×/4×",      desc: "Real-ESRGAN local pipeline",           state: "beta",   ai: true,  hot: false, v: "0.7.0", slug: "upscale",            urlCat: "image"     },
+  { id: "img-crop",      cat: "image", icon: "image", name: "Smart Crop",         desc: "Subject-aware framing",                state: "beta",   ai: true,  hot: false, v: "0.5.0", slug: "smart-crop",         urlCat: "image"     },
+  { id: "txt-summarize", cat: "text",  icon: "text",  name: "Summarize",          desc: "Long-form → essentials",               state: "stable", ai: true,  hot: false, v: "1.1.0", slug: "summarize",          urlCat: "text"      },
+  { id: "txt-rewrite",   cat: "text",  icon: "text",  name: "Rewrite",            desc: "Tone, length, audience",               state: "stable", ai: true,  hot: false, v: "1.2.0", slug: "rewrite",            urlCat: "text"      },
+  { id: "txt-diff",      cat: "text",  icon: "text",  name: "Diff & Merge",       desc: "Side-by-side comparison",              state: "stable", ai: false, hot: false, v: "1.0.0", slug: "diff-merge",         urlCat: "text"      },
+  { id: "txt-format",    cat: "text",  icon: "text",  name: "Format / Clean",     desc: "Whitespace, casing, encoding",         state: "stable", ai: false, hot: false, v: "1.4.0", slug: "format-clean",       urlCat: "text"      },
+  { id: "ai-chat",       cat: "ai",    icon: "spark", name: "Workbench",          desc: "Multi-model scratchpad",               state: "beta",   ai: true,  hot: true,  v: "0.4.2", slug: "workbench",          urlCat: "ai"        },
+  { id: "ai-extract",    cat: "ai",    icon: "spark", name: "Structured Extract", desc: "Files → JSON, schema-aware",           state: "beta",   ai: true,  hot: false, v: "0.3.0", slug: "structured-extract", urlCat: "ai"        },
+  { id: "ai-vision",     cat: "ai",    icon: "spark", name: "Image Inspect",      desc: "Caption, OCR, tagging",                state: "beta",   ai: true,  hot: false, v: "0.2.0", slug: "image-inspect",      urlCat: "ai"        },
+  { id: "ai-voice",      cat: "ai",    icon: "spark", name: "Transcribe",         desc: "Audio → text + speakers",              state: "beta",   ai: true,  hot: false, v: "0.5.0", slug: "transcribe",         urlCat: "ai"        },
+  { id: "ai-translate",  cat: "ai",    icon: "spark", name: "Translate",          desc: "40+ languages, context-aware",         state: "stable", ai: true,  hot: false, v: "1.0.0", slug: "translate",          urlCat: "ai"        },
+  { id: "dev-json",      cat: "dev",   icon: "code",  name: "JSON Toolkit",       desc: "Format, query, validate",              state: "stable", ai: false, hot: false, v: "1.2.0", slug: "json-toolkit",       urlCat: "developer" },
+  { id: "dev-regex",     cat: "dev",   icon: "code",  name: "Regex Lab",          desc: "Build, test, explain",                 state: "stable", ai: true,  hot: false, v: "1.1.0", slug: "regex-lab",          urlCat: "developer" },
+  { id: "dev-uuid",      cat: "dev",   icon: "code",  name: "UUID / Hash",        desc: "Generate, decode, verify",             state: "stable", ai: false, hot: false, v: "1.0.0", slug: "uuid-hash",          urlCat: "developer" },
+  { id: "dev-jwt",       cat: "dev",   icon: "code",  name: "JWT Inspector",      desc: "Decode, validate, sign",               state: "stable", ai: false, hot: false, v: "1.0.0", slug: "jwt-inspector",      urlCat: "developer" },
 ];
 
 export const ECOSYSTEM: EcosystemSystem[] = [
@@ -136,6 +138,10 @@ export const ECOSYSTEM: EcosystemSystem[] = [
     ],
   },
 ];
+
+export function getToolHref(tool: Tool): string {
+  return `/${tool.urlCat}/${tool.slug}`;
+}
 
 export const PROJECTS: Project[] = [
   { id: "p1", code: "M.01", name: "PDF runtime",       desc: "Wasm-based document pipeline powering the PDF Toolkit.",  tag: "Infra"    },

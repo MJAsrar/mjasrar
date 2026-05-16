@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import type { Tool } from "@/lib/data";
+import { getToolHref } from "@/lib/data";
 import { getToolIcon, BoltIcon, ArrowURIcon } from "@/lib/icons";
 
 export function ToolCard({ t }: { t: Tool }) {
@@ -9,16 +11,20 @@ export function ToolCard({ t }: { t: Tool }) {
   const Icon = getToolIcon(t.icon);
 
   return (
-    <div
+    <Link
+      href={getToolHref(t)}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       style={{
+        display: "block",
+        textDecoration: "none",
+        color: "inherit",
         background: hover ? "var(--surface-2)" : "var(--surface)",
         border: `1px solid ${hover ? "var(--line-2)" : "var(--line)"}`,
         borderRadius: 16,
         padding: 18,
         transition: "border-color 160ms ease, background 160ms ease",
-        cursor: "default",
+        cursor: "pointer",
       }}
     >
       {/* Icon + badges */}
@@ -122,6 +128,6 @@ export function ToolCard({ t }: { t: Tool }) {
           Open <ArrowURIcon />
         </span>
       </div>
-    </div>
+    </Link>
   );
 }

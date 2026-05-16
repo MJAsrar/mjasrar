@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import { ArrowIcon } from "@/lib/icons";
 
 const NAV_ITEMS = [
@@ -12,9 +13,23 @@ const NAV_ITEMS = [
 
 export function Nav() {
   const [hover, setHover] = useState<string | null>(null);
+  const pathname = usePathname();
+  const router = useRouter();
 
   const scrollTo = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (pathname === "/") {
+      document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else {
+      router.push(`/#${id}`);
+    }
+  };
+
+  const scrollToTop = () => {
+    if (pathname === "/") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      router.push("/");
+    }
   };
 
   return (
@@ -41,29 +56,22 @@ export function Nav() {
         }}
       >
         {/* Brand */}
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <div
-            style={{
-              width: 26,
-              height: 26,
-              borderRadius: 7,
-              background: "linear-gradient(135deg, var(--accent), oklch(0.7 0.18 165))",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              color: "#0a0a0b",
-              fontWeight: 700,
-              fontSize: 13,
-              fontFamily: "var(--font-geist-mono), monospace",
-              boxShadow: "0 0 0 1px rgba(255,255,255,0.06), inset 0 1px 0 rgba(255,255,255,0.4)",
-            }}
-          >
-            m
-          </div>
-          <span style={{ fontWeight: 600, fontSize: 15, letterSpacing: "-0.01em" }}>mjasrar</span>
+        <button
+          onClick={scrollToTop}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 10,
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            padding: 0,
+          }}
+        >
+          <span style={{ fontWeight: 600, fontSize: 15, letterSpacing: "-0.01em", color: "var(--fg)" }}>mjasrar</span>
           <span style={{ color: "var(--mute-2)", fontFamily: "var(--font-geist-mono), monospace", fontSize: 13 }}>/</span>
           <span style={{ color: "var(--mute)", fontFamily: "var(--font-geist-mono), monospace", fontSize: 12 }}>platform</span>
-        </div>
+        </button>
 
         {/* Links */}
         <div style={{ display: "flex", gap: 4, marginLeft: 18 }} className="nav-links">

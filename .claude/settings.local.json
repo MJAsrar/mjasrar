@@ -14,7 +14,11 @@
       "Read(//mnt/c/Users/junai/Desktop/**)",
       "Bash(npm list *)",
       "Bash(echo \"exit: $?\")",
-      "PowerShell(npm list *)"
+      "PowerShell(npm list *)",
+      "Bash(Get-ChildItem -Recurse \"C:\\\\Users\\\\junai\\\\Desktop\\\\new\\\\app\" -File)",
+      "Bash(Select-Object FullName)",
+      "Bash(mkdir -p \"/mnt/c/Users/junai/Desktop/new/app/[cat]/[slug]\")",
+      "Bash(powershell.exe -Command \"New-Item -ItemType Directory -Path 'C:\\\\Users\\\\junai\\\\Desktop\\\\new\\\\app\\\\[cat]\\\\[slug]' -Force\")"
     ]
   }
 }
