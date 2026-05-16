@@ -108,7 +108,7 @@ export function Projects() {
                 m
               </div>
               <div>
-                <div style={{ fontSize: 18, fontWeight: 500, marginBottom: 2 }}>M. Jasrar</div>
+                <div style={{ fontSize: 18, fontWeight: 500, marginBottom: 2 }}>mjasrar</div>
                 <div style={{ fontSize: 13, color: "var(--mute)" }}>Founder · solo builder</div>
               </div>
               <p style={{ fontSize: 14, color: "var(--fg-2)", lineHeight: 1.6 }}>

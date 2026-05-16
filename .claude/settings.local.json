@@ -6,7 +6,15 @@
       "Bash(rm -rf /c/Users/junai/Desktop/mjasrar)",
       "Bash(npm run *)",
       "Bash(curl -s http://localhost:3000)",
-      "Bash(kill %1)"
+      "Bash(kill %1)",
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\junai\\\\Desktop\\\\new\" -Recurse -Depth 3)",
+      "Bash(Select-Object FullName, PSIsContainer)",
+      "Bash(Sort-Object FullName)",
+      "Bash(Format-Table -AutoSize)",
+      "Read(//mnt/c/Users/junai/Desktop/**)",
+      "Bash(npm list *)",
+      "Bash(echo \"exit: $?\")",
+      "PowerShell(npm list *)"
     ]
   }
 }

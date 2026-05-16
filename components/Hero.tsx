@@ -149,7 +149,7 @@ export function Hero() {
           }}
         >
           {[
-            { k: "Founder",         v: "M. Jasrar · CS, FAST NUCES"  },
+            { k: "Founder",         v: "mjasrar · CS, FAST NUCES"  },
             { k: "Active modules",  v: "24 tools across 4 systems"    },
             { k: "Build cadence",   v: "Weekly releases · public log" },
             { k: "Privacy posture", v: "Local-first, on-device AI"    },
