@@ -37,20 +37,35 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 
-html, body {
+html {
   margin: 0;
   padding: 0;
   background: var(--bg);
   color: var(--fg);
-  overflow-x: hidden;
+  /* overflow-x must NOT be set on html — it propagates to the viewport and
+     corrupts Android Chrome's touch-event routing, breaking all onClick handlers */
 }
 
+html.menu-open body { overflow: hidden; }
+
 body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--fg);
+  overflow-x: clip;
   font-size: 15px;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   letter-spacing: -0.005em;
+  /* Ensures tap events generate clicks immediately on Android Chrome */
+  touch-action: pan-y;
+}
+
+/* Guarantee tap→click on all interactive elements regardless of parent touch-action */
+button, a, input, select, textarea {
+  touch-action: manipulation;
 }
 
 ::selection {
@@ -103,5 +118,24 @@ p { margin: 0; color: var(--fg-2); }
 }
 
 @media (max-width: 880px) {
+  /* filter:blur and mask-image create GPU compositing layers that corrupt
+     Android Chrome's hit-test tree — disable them on mobile */
+  .bg-glow-overlay { filter: none; }
+  .bg-grid-overlay { mask-image: none; }
+}
+
+@media (max-width: 880px) {
   :root { --pad-section: 80px; }
+
+  /* Scroll-reveal is JS-dependent and unreliable on mobile — just show everything */
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  /* !important overrides the inline display:"flex" on these elements */
+  .nav-links     { display: none !important; }
+  .nav-right     { display: none !important; }
+  .nav-hamburger { display: flex !important; }
 }

@@ -8,14 +8,30 @@ export function RevealOnScroll({ children, className = "" }: { children: ReactNo
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+
+    const reveal = () => el.classList.add("in");
+
+    // No IO support (old browser) — just show it
+    if (typeof IntersectionObserver === "undefined") {
+      reveal();
+      return;
+    }
+
+    // Already in the viewport on mount — reveal immediately
+    if (el.getBoundingClientRect().top < window.innerHeight) {
+      reveal();
+      return;
+    }
+
+    // Trigger as soon as any pixel enters the viewport (100px lookahead)
     const io = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          el.classList.add("in");
+          reveal();
           io.unobserve(el);
         }
       },
-      { threshold: 0.1, rootMargin: "0px 0px -8% 0px" }
+      { threshold: 0, rootMargin: "0px 0px 100px 0px" }
     );
     io.observe(el);
     return () => io.disconnect();
