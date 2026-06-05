@@ -18,75 +18,6 @@ export function ArrowURIcon(p: IconProps) {
   );
 }
 
-export function PdfIcon(p: IconProps) {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...p}>
-      <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" />
-      <path d="M14 3v5h5M9 13h6M9 17h4" />
-    </svg>
-  );
-}
-
-export function ImageIcon(p: IconProps) {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...p}>
-      <rect x="3" y="4" width="18" height="16" rx="2" />
-      <circle cx="9" cy="10" r="1.6" />
-      <path d="m3 17 5-5 4 4 3-3 6 6" />
-    </svg>
-  );
-}
-
-export function TextIcon(p: IconProps) {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...p}>
-      <path d="M4 6h16M7 6v14M17 6v14" />
-    </svg>
-  );
-}
-
-export function CodeIcon(p: IconProps) {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...p}>
-      <path d="m8 6-6 6 6 6M16 6l6 6-6 6M14 4l-4 16" />
-    </svg>
-  );
-}
-
-export function SparkIcon(p: IconProps) {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...p}>
-      <path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M5.6 18.4l2.8-2.8M15.6 8.4l2.8-2.8" />
-    </svg>
-  );
-}
-
-export function ClipIcon(p: IconProps) {
-  return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...p}>
-      <rect x="6" y="3" width="12" height="18" rx="2" />
-      <path d="M9 3v3h6V3" />
-    </svg>
-  );
-}
-
-export function BoltIcon(p: IconProps) {
-  return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...p}>
-      <path d="M13 2 4 14h7l-1 8 9-12h-7z" />
-    </svg>
-  );
-}
-
-export function SearchIcon(p: IconProps) {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" {...p}>
-      <circle cx="11" cy="11" r="7" />
-      <path d="m20 20-3.5-3.5" />
-    </svg>
-  );
-}
-
 export function GithubIcon(p: IconProps) {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" {...p}>
@@ -103,13 +34,28 @@ export function DownloadIcon(p: IconProps) {
   );
 }
 
-export function getToolIcon(icon: string) {
-  switch (icon) {
-    case "pdf":   return PdfIcon;
-    case "image": return ImageIcon;
-    case "text":  return TextIcon;
-    case "code":  return CodeIcon;
-    case "spark": return SparkIcon;
-    default:      return SparkIcon;
-  }
+export function MailIcon(p: IconProps) {
+  return (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" {...p}>
+      <rect x="2" y="4" width="20" height="16" rx="2" />
+      <path d="m2 7 10 7 10-7" />
+    </svg>
+  );
+}
+
+export function LinkedInIcon(p: IconProps) {
+  return (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" {...p}>
+      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z" />
+      <circle cx="4" cy="4" r="2" />
+    </svg>
+  );
+}
+
+export function XIcon(p: IconProps) {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" {...p}>
+      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.911-5.622Zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+    </svg>
+  );
 }

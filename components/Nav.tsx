@@ -2,23 +2,21 @@
 
 import { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { ArrowIcon } from "@/lib/icons";
 
 const NAV_ITEMS = [
-  { id: "tools",     label: "Tools"     },
-  { id: "ai",        label: "AI"        },
-  { id: "ecosystem", label: "Ecosystem" },
-  { id: "projects",  label: "Projects"  },
+  { id: "about",      label: "About"      },
+  { id: "projects",   label: "Projects"   },
+  { id: "experience", label: "Experience" },
+  { id: "skills",     label: "Skills"     },
+  { id: "contact",    label: "Contact"    },
 ];
 
 export function Nav() {
-  const [hover, setHover]     = useState<string | null>(null);
+  const [hover, setHover]       = useState<string | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
   const router   = useRouter();
 
-  // Lock body scroll when sidebar is open — toggle a CSS class on <html> instead of
-  // mutating body.style.overflow directly, which poisons Android Chrome's touch routing
   useEffect(() => {
     document.documentElement.classList.toggle("menu-open", menuOpen);
     return () => document.documentElement.classList.remove("menu-open");
@@ -81,9 +79,9 @@ export function Nav() {
               padding: 0,
             }}
           >
-            <span style={{ fontWeight: 600, fontSize: 15, letterSpacing: "-0.01em", color: "var(--fg)" }}>mjasrar</span>
+            <span style={{ fontWeight: 600, fontSize: 15, letterSpacing: "-0.01em", color: "var(--fg)" }}>Junaid Asrar</span>
             <span style={{ color: "var(--mute-2)", fontFamily: "var(--font-geist-mono), monospace", fontSize: 13 }}>/</span>
-            <span style={{ color: "var(--mute)", fontFamily: "var(--font-geist-mono), monospace", fontSize: 12 }}>platform</span>
+            <span style={{ color: "var(--mute)", fontFamily: "var(--font-geist-mono), monospace", fontSize: 12 }}>portfolio</span>
           </button>
 
           {/* Desktop links */}
@@ -115,72 +113,35 @@ export function Nav() {
 
           <div style={{ flex: 1 }} />
 
-          {/* Desktop right */}
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }} className="nav-right">
-            <div
+          {/* Status badge */}
+          <div
+            className="nav-right"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 8,
+              fontFamily: "var(--font-geist-mono), monospace",
+              fontSize: 11.5,
+              color: "var(--mute)",
+              padding: "0 10px",
+              height: 26,
+              borderRadius: 999,
+              border: "1px solid var(--line)",
+            }}
+          >
+            <span
               style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 8,
-                fontFamily: "var(--font-geist-mono), monospace",
-                fontSize: 11.5,
-                color: "var(--mute)",
-                padding: "0 10px",
-                height: 26,
-                borderRadius: 999,
-                border: "1px solid var(--line)",
+                width: 6,
+                height: 6,
+                borderRadius: "50%",
+                background: "var(--accent)",
+                boxShadow: "0 0 0 3px var(--accent-2)",
               }}
-            >
-              <span
-                style={{
-                  width: 6,
-                  height: 6,
-                  borderRadius: "50%",
-                  background: "var(--accent)",
-                  boxShadow: "0 0 0 3px var(--accent-2)",
-                }}
-              />
-              all systems
-            </div>
-            <button
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 8,
-                height: 34,
-                padding: "0 12px",
-                borderRadius: 10,
-                border: "1px solid var(--line-2)",
-                background: "rgba(255,255,255,0.03)",
-                color: "var(--fg)",
-                fontSize: 13,
-                fontWeight: 500,
-                cursor: "pointer",
-              }}
-            >
-              Sign in
-            </button>
-            <button
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 8,
-                height: 34,
-                padding: "0 14px",
-                borderRadius: 10,
-                border: "1px solid var(--fg)",
-                background: "var(--fg)",
-                color: "#0a0a0b",
-                fontSize: 13,
-                fontWeight: 500,
-                cursor: "pointer",
-              }}
-            >
-              Open app <ArrowIcon />
-            </button>
+            />
+            open to work
           </div>
 
-          {/* Hamburger — mobile only; display:none overridden to flex by globals.css !important */}
+          {/* Hamburger */}
           <button
             className="nav-hamburger"
             onClick={() => setMenuOpen(true)}
@@ -206,10 +167,8 @@ export function Nav() {
             <span style={{ display: "block", width: 16, height: 1.5, background: "var(--fg)", borderRadius: 2 }} />
           </button>
         </div>
-
       </nav>
 
-      {/* Backdrop — only in DOM when open; no backdropFilter (causes compositing layer that swallows touch events on Android Chrome) */}
       {menuOpen && (
         <div
           onClick={() => setMenuOpen(false)}
@@ -222,7 +181,6 @@ export function Nav() {
         />
       )}
 
-      {/* Sidebar */}
       <aside
         style={{
           position: "fixed",
@@ -241,7 +199,6 @@ export function Nav() {
           pointerEvents: menuOpen ? "auto" : "none",
         }}
       >
-        {/* Sidebar header */}
         <div
           style={{
             display: "flex",
@@ -255,11 +212,9 @@ export function Nav() {
             onClick={scrollToTop}
             style={{ display: "flex", alignItems: "center", gap: 8, background: "none", border: "none", cursor: "pointer", padding: 0 }}
           >
-            <span style={{ fontWeight: 600, fontSize: 15, color: "var(--fg)" }}>mjasrar</span>
-            <span style={{ color: "var(--mute)", fontFamily: "var(--font-geist-mono), monospace", fontSize: 12 }}>/platform</span>
+            <span style={{ fontWeight: 600, fontSize: 15, color: "var(--fg)" }}>Junaid Asrar</span>
+            <span style={{ color: "var(--mute)", fontFamily: "var(--font-geist-mono), monospace", fontSize: 12 }}>/portfolio</span>
           </button>
-
-          {/* Close button */}
           <button
             onClick={() => setMenuOpen(false)}
             aria-label="Close menu"
@@ -282,7 +237,6 @@ export function Nav() {
           </button>
         </div>
 
-        {/* Nav items */}
         <div style={{ flex: 1, padding: "12px 12px", display: "flex", flexDirection: "column", gap: 2 }}>
           {NAV_ITEMS.map((it) => (
             <button
@@ -307,17 +261,12 @@ export function Nav() {
           ))}
         </div>
 
-        {/* Bottom actions */}
         <div
           style={{
             padding: "16px 20px",
             borderTop: "1px solid var(--line)",
-            display: "flex",
-            flexDirection: "column",
-            gap: 10,
           }}
         >
-          {/* Status */}
           <div
             style={{
               display: "flex",
@@ -326,7 +275,6 @@ export function Nav() {
               fontFamily: "var(--font-geist-mono), monospace",
               fontSize: 11.5,
               color: "var(--mute)",
-              marginBottom: 4,
             }}
           >
             <span
@@ -339,45 +287,8 @@ export function Nav() {
                 flexShrink: 0,
               }}
             />
-            all systems · 99.98%
+            Open to AI roles & freelance
           </div>
-
-          <button
-            style={{
-              width: "100%",
-              height: 42,
-              borderRadius: 10,
-              border: "1px solid var(--line-2)",
-              background: "rgba(255,255,255,0.03)",
-              color: "var(--fg)",
-              fontSize: 14,
-              fontWeight: 500,
-              cursor: "pointer",
-              fontFamily: "inherit",
-            }}
-          >
-            Sign in
-          </button>
-          <button
-            style={{
-              width: "100%",
-              height: 42,
-              borderRadius: 10,
-              border: "1px solid var(--fg)",
-              background: "var(--fg)",
-              color: "#0a0a0b",
-              fontSize: 14,
-              fontWeight: 500,
-              cursor: "pointer",
-              fontFamily: "inherit",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: 8,
-            }}
-          >
-            Open app <ArrowIcon />
-          </button>
         </div>
       </aside>
     </>

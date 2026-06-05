@@ -16,22 +16,22 @@ const geistMono = Geist_Mono({
 });
 
 const DESCRIPTION =
-  "A growing suite of utility and AI tools built by an indie founder. One identity, one interface, dozens of small, sharp products.";
+  "AI Engineer, Builder & Founder based in Islamabad. I build AI systems that ship — from multi-agent pipelines to products used by real people.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://mjasrar.com"),
-  title: "mjasrar — building a software ecosystem",
+  title: "Junaid Asrar — AI Engineer · Builder · Founder",
   description: DESCRIPTION,
   openGraph: {
-    title: "mjasrar — building a software ecosystem",
+    title: "Junaid Asrar — AI Engineer · Builder · Founder",
     description: DESCRIPTION,
     url: "https://mjasrar.com",
-    siteName: "mjasrar",
+    siteName: "Junaid Asrar",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "mjasrar — building a software ecosystem",
+    title: "Junaid Asrar — AI Engineer · Builder · Founder",
     description: DESCRIPTION,
   },
 };
