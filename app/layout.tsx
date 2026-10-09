@@ -1,55 +1,21 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import { Analytics } from "@vercel/analytics/next";
-import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-});
-
-const DESCRIPTION =
-  "AI Engineer, Builder & Founder based in Islamabad. I build AI systems that ship — from multi-agent pipelines to products used by real people.";
+import { Analytics } from "@vercel/analytics/next"
+import type { Metadata } from "next"
+import type { ReactNode } from "react"
+import "./globals.css"
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://mjasrar.com"),
-  title: "Junaid Asrar — AI Engineer · Builder · Founder",
-  description: DESCRIPTION,
+  metadataBase: new URL("https://www.mjasrar.site"),
+  title: "Junaid Asrar — Engineering intelligence.",
+  description: "AI engineer, builder, and university leader in Islamabad. Production AI, multilingual automation, and agentic systems.",
+  icons: { icon: "/favicon.svg" },
   openGraph: {
-    title: "Junaid Asrar — AI Engineer · Builder · Founder",
-    description: DESCRIPTION,
-    url: "https://mjasrar.com",
-    siteName: "Junaid Asrar",
+    title: "Junaid Asrar — Engineering intelligence.",
+    description: "Production AI, thoughtful products, and the engineering to make them real.",
+    url: "https://www.mjasrar.site",
     type: "website",
   },
-  twitter: {
-    card: "summary_large_image",
-    title: "Junaid Asrar — AI Engineer · Builder · Founder",
-    description: DESCRIPTION,
-  },
-};
+}
 
-export default function RootLayout({
-  children,
-}: Readonly<{ children: React.ReactNode }>) {
-  return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable}`}
-    >
-      <body data-density="compact">
-        <div className="bg-glow-overlay" aria-hidden="true" />
-        <div className="bg-grid-overlay" aria-hidden="true" />
-        {children}
-        <Analytics />
-      </body>
-    </html>
-  );
+export default function RootLayout({ children }: { children: ReactNode }) {
+  return <html lang="en"><body>{children}<Analytics /></body></html>
 }
