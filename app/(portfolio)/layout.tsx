@@ -4,8 +4,9 @@ import { Geist_Mono, Instrument_Serif, Manrope } from "next/font/google";
 import type { ReactNode } from "react";
 import "./portfolio.css";
 
-// Junaid Asrar's personal portfolio. It has its own root layout so it shares
-// no code with the company site and can move to portfolio.mjasrar.site as-is;
+// Junaid Asrar's personal portfolio, served at portfolio.mjasrar.site. It has its
+// own root layout and shares no code with the company site, so it could move to
+// its own project as-is;
 // it uses the same type, colours and saved theme so the two feel like one brand.
 const sans = Manrope({ subsets: ["latin"], variable: "--font-sans", display: "swap" });
 const serif = Instrument_Serif({ subsets: ["latin"], weight: "400", style: ["normal", "italic"], variable: "--font-serif", display: "swap" });
@@ -15,10 +16,11 @@ const mono = Geist_Mono({ subsets: ["latin"], variable: "--font-mono", display: 
 const themeInit = `try{var t=localStorage.getItem("theme");if(t==="dark"||t==="light")document.documentElement.dataset.theme=t}catch(e){}`;
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.mjasrar.site"),
+  metadataBase: new URL("https://portfolio.mjasrar.site"),
   title: "Junaid Asrar — Engineering intelligence.",
   description:
     "AI engineer, builder and university leader in Islamabad. Production AI, multilingual automation and agentic systems.",
+  alternates: { canonical: "/" },
   icons: {
     icon: [
       { url: "/favicon.svg", type: "image/svg+xml" },
@@ -28,7 +30,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Junaid Asrar — Engineering intelligence.",
     description: "Production AI, thoughtful products, and the engineering to make them real.",
-    url: "https://www.mjasrar.site/portfolio",
+    url: "https://portfolio.mjasrar.site",
     type: "website",
   },
 };

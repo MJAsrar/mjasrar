@@ -11,7 +11,7 @@ export const COMPANY = {
   country: "Pakistan",
   timezone: "PKT, UTC+5",
   founder: "Junaid Asrar",
-  portfolio: "/portfolio",
+  portfolio: "https://portfolio.mjasrar.site",
   description:
     "MJAsrar is a software company in Islamabad, Pakistan. We build AI agents, chatbots, voice AI, document search and custom software for businesses in Pakistan and abroad.",
 };

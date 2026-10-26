@@ -16,6 +16,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...WORK.map((w) => page(`/work/${w.slug}`, 0.7)),
     page("/about", 0.6),
     page("/contact", 0.8),
-    page("/portfolio", 0.4),
   ];
 }
