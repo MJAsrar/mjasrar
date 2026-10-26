@@ -14,7 +14,7 @@ export default function ContactBand({ n }: { n?: string }) {
             Contact
           </p>
           <h2 id="contact-title">
-            Tell us what you want to <em>automate.</em>
+            Tell us what you want to automate.
           </h2>
           <p className="band-lead">
             Send a short brief or email us. We’ll reply with questions or a time to talk, and if AI isn’t the right answer,

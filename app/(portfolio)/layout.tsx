@@ -1,6 +1,6 @@
 import { Analytics } from "@vercel/analytics/next";
 import type { Metadata, Viewport } from "next";
-import { Geist_Mono, Instrument_Serif, Manrope } from "next/font/google";
+import { Geist_Mono, Manrope } from "next/font/google";
 import type { ReactNode } from "react";
 import "./portfolio.css";
 
@@ -9,7 +9,6 @@ import "./portfolio.css";
 // its own project as-is;
 // it uses the same type, colours and saved theme so the two feel like one brand.
 const sans = Manrope({ subsets: ["latin"], variable: "--font-sans", display: "swap" });
-const serif = Instrument_Serif({ subsets: ["latin"], weight: "400", style: ["normal", "italic"], variable: "--font-serif", display: "swap" });
 const mono = Geist_Mono({ subsets: ["latin"], variable: "--font-mono", display: "swap" });
 
 // Applies a saved light/dark choice before first paint, so there is no flash.
@@ -46,7 +45,7 @@ export const viewport: Viewport = {
 
 export default function PortfolioLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" data-theme="light" className={`${sans.variable} ${serif.variable} ${mono.variable}`} suppressHydrationWarning>
+    <html lang="en" data-theme="light" className={`${sans.variable} ${mono.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInit }} />
       </head>

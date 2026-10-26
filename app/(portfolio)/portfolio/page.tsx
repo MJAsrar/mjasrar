@@ -38,7 +38,7 @@ export default function PortfolioPage() {
               Independent thinking, applied AI
             </p>
             <h1 id="hero-title" data-reveal="load">
-              <span className="caps">Engineering</span> <em>intelligence.</em>
+              Engineering <span className="line">intelligence.</span>
             </h1>
             <p className="hero-lead" data-fade="1">
               I turn complex AI into things people use. Agentic systems, thoughtful products, and the engineering to make
@@ -77,7 +77,7 @@ export default function PortfolioPage() {
             <div>
               <Label n="01">Selected work, international client</Label>
               <h2 id="wa-title" data-reveal>
-                Better conversations. <em>Better-qualified leads.</em>
+                Better conversations. <span className="line">Better-qualified leads.</span>
               </h2>
               <p className="sec-lead" data-fade>
                 A custom multilingual WhatsApp AI system for a B2B solar street-light manufacturer in China, built to answer
@@ -119,7 +119,7 @@ export default function PortfolioPage() {
             <div>
               <Label n="02">Knowledge and multi-agent systems</Label>
               <h2 id="cw-title" data-reveal>
-                CoWriteIA. <em>Context is everything.</em>
+                CoWriteIA. <span className="line">Context is everything.</span>
               </h2>
               <p className="sec-lead" data-fade>
                 A multi-agent writing system that connects knowledge across documents to create context-aware narratives.
@@ -145,7 +145,7 @@ export default function PortfolioPage() {
             <div>
               <Label n="03">More work</Label>
               <h2 id="projects-title" data-reveal>
-                Six more, <em>shipped.</em>
+                Six more, shipped.
               </h2>
             </div>
             <p className="sec-lead">
@@ -183,7 +183,7 @@ export default function PortfolioPage() {
             <div>
               <Label n="04">The person behind the pipelines</Label>
               <h2 id="about-title" data-reveal>
-                A builder’s instinct. <em>A problem solver’s persistence.</em>
+                A builder’s instinct. <span className="line">A problem solver’s persistence.</span>
               </h2>
               <p className="sec-lead" data-fade>
                 I’m Junaid, an AI engineer based in Islamabad. I work across the stack, from retrieval and agent
@@ -226,7 +226,7 @@ export default function PortfolioPage() {
             <div>
               <Label n="05">Leadership and community</Label>
               <h2 id="lead-title" data-reveal>
-                Building systems. <em>Leading people.</em>
+                Building systems. <span className="line">Leading people.</span>
               </h2>
               <div className="lead-card" data-fade>
                 <p className="label">President</p>
@@ -266,7 +266,7 @@ export default function PortfolioPage() {
             <div>
               <Label n="07">What’s next</Label>
               <h2 id="contact-title" data-reveal>
-                Let’s build something <em>real.</em>
+                Let’s build something real.
               </h2>
               <p className="sec-lead" data-fade>
                 Open to AI roles and freelance work. Write to me and I’ll get back to you.
