@@ -112,7 +112,8 @@ main, .site-footer { position: relative; z-index: 1; }
 }
 .brand { display: inline-flex; align-items: center; gap: 10px; justify-self: start; font-size: 13.5px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; white-space: nowrap; }
 .mark-tile { fill: var(--fg); }
-.mark-letter { fill: var(--bg); }
+.mark-line { stroke: var(--bg); }
+.mark-dot { fill: var(--bg); }
 .nav { display: flex; gap: 2px; }
 .nav a { padding: 8px 13px; border-radius: 999px; color: var(--fg-2); font-size: 14px; font-weight: 500; transition: color 0.2s, background-color 0.2s; }
 .nav a:hover { color: var(--fg); background: var(--ghost); }

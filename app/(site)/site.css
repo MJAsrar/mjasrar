@@ -107,9 +107,10 @@ p { text-wrap: pretty; }
   backdrop-filter: blur(16px) saturate(1.4); -webkit-backdrop-filter: blur(16px) saturate(1.4);
   box-shadow: 0 12px 32px -16px rgba(11, 13, 16, 0.22);
 }
-.brand { display: inline-flex; align-items: center; gap: 10px; justify-self: start; font-size: 14px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; }
+.brand { display: inline-flex; align-items: center; gap: 10px; justify-self: start; font-size: 19px; font-weight: 800; letter-spacing: -0.045em; }
 .mark-tile { fill: var(--fg); }
-.mark-letter { fill: var(--bg); }
+.mark-line { stroke: var(--bg); }
+.mark-dot { fill: var(--bg); }
 .nav { display: flex; gap: 2px; }
 .nav a { padding: 8px 13px; border-radius: 999px; color: var(--fg-2); font-size: 14px; font-weight: 500; transition: color 0.2s, background-color 0.2s; }
 .nav a:hover { color: var(--fg); }
@@ -362,7 +363,7 @@ p { text-wrap: pretty; }
 .cs-note { margin-top: 18px; color: var(--fg-3); font: 500 11.5px/1.5 var(--mono); }
 .prose-grid { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: 18px 64px; padding-block: 44px; border-top: 1px solid var(--line); }
 .prose-grid:first-child { border-top: 0; padding-top: 0; }
-.prose-grid h2 { font-size: clamp(24px, 2.4vw, 32px); font-weight: 600; letter-spacing: -0.04em; line-height: 1.1; }
+.prose-grid h2, .prose-grid h3 { font-size: clamp(24px, 2.4vw, 32px); font-weight: 600; letter-spacing: -0.04em; line-height: 1.1; }
 .prose-grid p { max-width: 38em; font-size: 18px; line-height: 1.65; }
 .next-case { display: grid; gap: 14px; padding-block: clamp(56px, 7vw, 96px); border-top: 1px solid var(--line); }
 .next-case b { font-size: clamp(30px, 4vw, 56px); font-weight: 600; line-height: 1.02; letter-spacing: -0.05em; }
@@ -405,6 +406,10 @@ p { text-wrap: pretty; }
 .check:has(input:focus-visible) { outline: 2px solid var(--fg); outline-offset: 2px; }
 .check input:focus-visible { outline: none; }
 .form-status { margin-top: 20px; padding: 16px 18px; border: 1px solid var(--line-strong); border-radius: 12px; background: var(--bg-2); }
+.brief .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.brief button:disabled { opacity: 0.6; cursor: progress; }
+.aside-cta { margin-top: 16px; }
+.lp-more { margin-top: 24px; }
 .form-error { margin-top: 12px; color: #c0392b; font-size: 14.5px; }
 [data-theme="dark"] .form-error { color: #ff8a7a; }
 .contact-aside { display: grid; }

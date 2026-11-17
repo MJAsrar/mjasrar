@@ -27,9 +27,17 @@ export default function Header() {
     <header className="site-header" data-scrolled={scrolled || open} data-open={open}>
       <div className="nav-shell">
         <a href="#top" className="brand" aria-label="Junaid Asrar, back to top">
-          <svg className="mark" width="26" height="26" viewBox="0 0 32 32" aria-hidden="true">
-            <rect className="mark-tile" width="32" height="32" rx="8" />
-            <path className="mark-letter" d="M8 23V9h4.2l3.8 6 3.8-6H24v14h-4v-7.6l-4 6-4-6V23z" />
+          <svg className="mark" width="26" height="26" viewBox="0 0 48 48" aria-hidden="true">
+            <rect className="mark-tile" width="48" height="48" rx="12" />
+            <path
+              className="mark-line"
+              d="M11.5 32V22.25a5.25 5.25 0 0 1 10.5 0V32M22 22.25a5.25 5.25 0 0 1 10.5 0V35.5a5 5 0 0 1-5 5H26"
+              fill="none"
+              strokeWidth="4.6"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <circle className="mark-dot" cx="32.5" cy="10.25" r="2.7" />
           </svg>
           <span>Junaid Asrar</span>
         </a>

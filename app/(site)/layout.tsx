@@ -27,11 +27,12 @@ export const metadata: Metadata = {
       { url: "/favicon.svg", type: "image/svg+xml" },
       { url: "/favicon.ico", sizes: "48x48" },
     ],
+    apple: "/apple-touch-icon.png",
   },
   openGraph: {
     siteName: COMPANY.name,
     type: "website",
-    locale: "en_PK",
+    locale: "en_US",
   },
   twitter: { card: "summary_large_image" },
 };

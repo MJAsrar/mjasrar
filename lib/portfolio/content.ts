@@ -10,7 +10,7 @@ export type Project = {
   link?: string;
 };
 
-export const EMAIL = "junaidasrar04@gmail.com";
+export const EMAIL = "contact@mjasrar.site";
 
 // The software company, linked from the contact section.
 export const COMPANY_URL = "https://www.mjasrar.site";

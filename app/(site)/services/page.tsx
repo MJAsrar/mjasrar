@@ -91,6 +91,13 @@ export default function ServicesPage() {
                             <li key={t}>{t}</li>
                           ))}
                         </ul>
+                        {s.slug === "chatbots" && (
+                          <p className="svc-related">
+                            <Link className="u-link" href="/whatsapp-assistant">
+                              The WhatsApp sales assistant, in detail
+                            </Link>
+                          </p>
+                        )}
                         {related.length > 0 && (
                           <p className="svc-related">
                             <span>Related work</span>

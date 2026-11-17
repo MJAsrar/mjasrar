@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import BookCall from "@/components/site/BookCall";
 import CopyEmail from "@/components/site/CopyEmail";
 import ProjectBrief from "@/components/site/ProjectBrief";
 import { COMPANY } from "@/lib/site";
@@ -17,8 +18,8 @@ export default function ContactPage() {
           <p className="label">Contact</p>
           <h1>Start a project.</h1>
           <p className="page-lead">
-            Tell us what you want to build or automate. A few sentences is enough; we’ll reply with questions or a time to
-            talk.
+            Tell us what you want to build or automate. A few sentences is enough; we’ll reply by email with questions or a
+            time to talk.
           </p>
         </div>
       </header>
@@ -27,6 +28,15 @@ export default function ContactPage() {
         <div className="wrap contact-grid">
           <ProjectBrief />
           <aside className="contact-aside" aria-label="Other ways to reach us">
+            {COMPANY.booking && (
+              <div>
+                <h2 className="label">Prefer to talk?</h2>
+                <p>Pick a time for a 20-minute video call. No preparation needed.</p>
+                <p className="aside-cta">
+                  <BookCall from="contact-page" />
+                </p>
+              </div>
+            )}
             <div>
               <h2 className="label">Email</h2>
               <a className="big-email u-link" href={`mailto:${COMPANY.email}`}>
@@ -47,7 +57,7 @@ export default function ContactPage() {
               <ol>
                 <li>We read your brief and reply with questions.</li>
                 <li>A call to understand the problem and your systems.</li>
-                <li>A written scope, timeline and price.</li>
+                <li>A written scope, timeline and fixed price.</li>
               </ol>
             </div>
           </aside>

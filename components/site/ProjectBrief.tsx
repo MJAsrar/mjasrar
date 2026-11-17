@@ -1,64 +1,60 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { track } from "@vercel/analytics";
+import { useActionState, useEffect } from "react";
+import { sendBrief, type BriefState } from "@/lib/brief";
 import { COMPANY, SERVICES } from "@/lib/site";
 
 const TIMING = ["As soon as possible", "In the next 1–3 months", "Later this year", "Just exploring"];
 
-// There is no mail backend, so the brief is composed into an email in the
-// visitor's own mail app. The status line says so plainly after submitting.
-export default function ProjectBrief() {
-  const [sent, setSent] = useState(false);
-  const [error, setError] = useState("");
+const initial: BriefState = { status: "idle", message: "" };
 
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const data = new FormData(e.currentTarget);
-    const get = (k: string) => String(data.get(k) ?? "").trim();
-    const name = get("name");
-    const company = get("company");
-    const needs = data.getAll("needs").map(String);
-    const timing = get("timing");
+// The brief is sent straight to the company inbox by a server action.
+// `source` says which page it came from, so ad and outreach traffic can be told apart.
+export default function ProjectBrief({ source = "contact", preselect = [] }: { source?: string; preselect?: string[] }) {
+  const [state, action, pending] = useActionState(sendBrief, initial);
 
-    const lines = [
-      `Name: ${name}`,
-      `Email: ${get("email")}`,
-      ...(company ? [`Company: ${company}`] : []),
-      ...(needs.length ? [`Looking for: ${needs.join(", ")}`] : []),
-      ...(timing ? [`Timing: ${timing}`] : []),
-      "",
-      get("details"),
-    ];
-    const subject = `Project brief from ${name}${company ? ` (${company})` : ""}`;
-    const href = `mailto:${COMPANY.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lines.join("\n"))}`;
+  useEffect(() => {
+    if (state.status === "sent") track("Brief sent", { from: source });
+  }, [state, source]);
 
-    // Some mail apps truncate or refuse very long mailto links.
-    if (href.length > 2000) {
-      setError("That brief is too long to send through your email app. Shorten the description, or email us directly.");
-      return;
-    }
-    setError("");
-    window.location.href = href;
-    setSent(true);
-  };
+  if (state.status === "sent") {
+    return (
+      <div className="brief">
+        <p className="form-status" role="status">
+          Thanks, your brief is on its way. We’ll reply by email with questions or a time to talk. If you don’t hear
+          back, write to{" "}
+          <a className="text-link" href={`mailto:${COMPANY.email}`}>
+            {COMPANY.email}
+          </a>
+          .
+        </p>
+      </div>
+    );
+  }
 
   return (
-    <form className="brief" onSubmit={onSubmit}>
+    <form className="brief" action={action}>
+      <input type="hidden" name="source" value={source} />
+      <div className="hp" aria-hidden="true">
+        <label htmlFor="website">Website</label>
+        <input id="website" name="website" tabIndex={-1} autoComplete="off" />
+      </div>
       <div className="two">
         <div className="field">
           <label htmlFor="name">Your name</label>
-          <input id="name" name="name" autoComplete="name" required />
+          <input id="name" name="name" autoComplete="name" required maxLength={120} />
         </div>
         <div className="field">
-          <label htmlFor="email">Email</label>
-          <input id="email" name="email" type="email" autoComplete="email" required />
+          <label htmlFor="email">Work email</label>
+          <input id="email" name="email" type="email" autoComplete="email" required maxLength={200} />
         </div>
       </div>
       <div className="field">
         <label htmlFor="company">
           Company <span className="optional">(optional)</span>
         </label>
-        <input id="company" name="company" autoComplete="organization" />
+        <input id="company" name="company" autoComplete="organization" maxLength={160} />
       </div>
       <fieldset>
         <legend>
@@ -67,7 +63,7 @@ export default function ProjectBrief() {
         <div className="checks">
           {SERVICES.map((s) => (
             <label key={s.slug} className="check">
-              <input type="checkbox" name="needs" value={s.short} />
+              <input type="checkbox" name="needs" value={s.short} defaultChecked={preselect.includes(s.slug)} />
               {s.short}
             </label>
           ))}
@@ -80,7 +76,7 @@ export default function ProjectBrief() {
           name="details"
           required
           maxLength={1200}
-          placeholder="For example: our sales team answers the same WhatsApp questions all day, in Urdu and English, and we lose leads after hours."
+          placeholder="For example: our ads bring in hundreds of WhatsApp messages a week, in Arabic and English, and we lose leads after hours."
         />
       </div>
       <div className="field">
@@ -94,21 +90,14 @@ export default function ProjectBrief() {
           ))}
         </select>
       </div>
-      <button type="submit" className="btn">
-        Email this brief
+      <button type="submit" className="btn" disabled={pending}>
+        {pending ? "Sending…" : "Send brief"}
       </button>
-      {error && (
+      {state.status === "error" && (
         <p className="form-error" role="alert">
-          {error}
+          {state.message}
         </p>
       )}
-      <p className="form-status" role="status" hidden={!sent}>
-        Your email app should now be open with the brief filled in. Press send there. If nothing opened, email{" "}
-        <a className="text-link" href={`mailto:${COMPANY.email}`}>
-          {COMPANY.email}
-        </a>{" "}
-        instead.
-      </p>
     </form>
   );
 }

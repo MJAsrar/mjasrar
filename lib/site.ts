@@ -6,14 +6,16 @@ export const COMPANY = {
   legalName: "MJAsrar (SMC-Private) Limited",
   registration: "Single-member company registered with the SECP",
   url: "https://www.mjasrar.site",
-  email: "junaidasrar04@gmail.com",
+  email: "contact@mjasrar.site",
   city: "Islamabad",
   country: "Pakistan",
   timezone: "PKT, UTC+5",
   founder: "Junaid Asrar",
   portfolio: "https://portfolio.mjasrar.site",
+  // Paste a Cal.com or Calendly link here and every "Book a call" button appears.
+  booking: "",
   description:
-    "MJAsrar is a software company in Islamabad, Pakistan. We build AI agents, chatbots, voice AI, document search and custom software for businesses in Pakistan and abroad.",
+    "MJAsrar builds AI agents, WhatsApp sales assistants, voice AI, document search and custom software for businesses worldwide. Based in Islamabad, working remotely across time zones.",
 };
 
 export const NAV = [
@@ -73,7 +75,7 @@ export const SERVICE_GROUPS: { name: string; intro: string; services: Service[] 
         name: "Chatbots and WhatsApp assistants",
         short: "Chatbots",
         summary:
-          "Customer assistants on WhatsApp and your website that answer from your own catalogue and policies, in English, Urdu, Roman Urdu, Arabic and more.",
+          "Customer assistants on WhatsApp and your website that answer from your own catalogue and policies, in English, Arabic, Spanish, French, Urdu and more.",
         body: "Your customers already message you. We connect an assistant directly to the WhatsApp Business Platform and your website, ground its answers in your documents, and have it pass the conversation to your team when a person should take over.",
         deliverables: [
           "Direct WhatsApp Cloud API integration, without per-seat chatbot subscriptions",
@@ -116,9 +118,9 @@ export const SERVICE_GROUPS: { name: string; intro: string; services: Service[] 
         short: "Voice AI",
         summary:
           "Voice agents that answer calls and voice notes, and pipelines that turn meetings into transcripts, summaries and action items.",
-        body: "A lot of business in Pakistan happens in voice notes and phone calls. We build speech pipelines that transcribe and understand them, in Urdu and English, and agents that reply by voice or text.",
+        body: "A lot of business happens in voice notes and phone calls. We build speech pipelines that transcribe and understand them, in English, Arabic, Urdu and other languages, and agents that reply by voice or text.",
         deliverables: [
-          "Speech-to-text and text-to-speech in Urdu, English and other languages",
+          "Speech-to-text and text-to-speech in English, Arabic, Urdu and other languages",
           "Voice-note handling inside WhatsApp assistants",
           "Meeting transcription with speaker attribution",
           "Structured summaries, decisions and action items",
@@ -390,7 +392,7 @@ export const ENGAGEMENTS = [
   {
     key: "project",
     name: "Project",
-    meta: "Scoped and quoted",
+    meta: "Fixed price",
     fit: "You know the problem and want a working system.",
     body: "End-to-end delivery. A prototype comes early so the risky parts are tested first, then production engineering, integration and handover.",
     phases: ["Scope", "Prototype", "Build and test", "Launch"],
@@ -465,18 +467,22 @@ export const PRINCIPLES = [
   },
   {
     title: "Build for real conditions",
-    text: "Patchy internet, load-shedding, Urdu voice notes, sensitive data. We design for how your business actually runs.",
+    text: "Leads that arrive at midnight, voice notes in several languages, patchy connections, data that can’t leave the building. We design for how your business actually runs.",
   },
 ];
 
 export const FAQ = [
   {
     q: "Do you work with clients outside Pakistan?",
-    a: "Yes. We work remotely and have delivered for clients in Pakistan and abroad, including a manufacturer in China. We’re based in Islamabad (PKT, UTC+5), which overlaps with working hours in the Gulf, Europe and much of Asia.",
+    a: "Yes. We work remotely and have delivered for clients in Pakistan and abroad, including an export manufacturer in China. We’re based in Islamabad (PKT, UTC+5), one to two hours ahead of the Gulf, with a good overlap with mornings in the UK and Europe. Calls, documents and contracts are in English.",
   },
   {
-    q: "Can an assistant understand Urdu and Roman Urdu?",
-    a: "Yes. Current models handle Urdu script, Roman Urdu and mixed English and Urdu well, and Urdu voice notes can be transcribed. We test on real messages from your customers before launch.",
+    q: "How do you price a project?",
+    a: "Every project has a fixed price, agreed in writing with the scope before work starts, so you know what you’re paying for. If you’d rather start small, a discovery sprint tests the idea on your own data first. Each quote also estimates the monthly running costs.",
+  },
+  {
+    q: "Which languages can an assistant handle?",
+    a: "Most of them. Our WhatsApp assistant for an export manufacturer answers in English, Spanish, French and Arabic from one number. Current models also handle Urdu, Roman Urdu and mixed-language messages well, and voice notes can be transcribed. We test on real messages from your customers before launch.",
   },
   {
     q: "What does an AI system cost to run?",

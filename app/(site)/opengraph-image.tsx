@@ -22,11 +22,19 @@ export default function OpengraphImage() {
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
-          <svg width="52" height="52" viewBox="0 0 32 32">
-            <rect width="32" height="32" rx="8" fill="#f4f6f8" />
-            <path d="M8 23V9h4.2l3.8 6 3.8-6H24v14h-4v-7.6l-4 6-4-6V23z" fill="#08090b" />
+          <svg width="56" height="56" viewBox="0 0 48 48">
+            <rect width="48" height="48" rx="12" fill="#f4f6f8" />
+            <path
+              d="M11.5 32V22.25a5.25 5.25 0 0 1 10.5 0V32M22 22.25a5.25 5.25 0 0 1 10.5 0V35.5a5 5 0 0 1-5 5H26"
+              fill="none"
+              stroke="#08090b"
+              strokeWidth="4.6"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <circle cx="32.5" cy="10.25" r="2.7" fill="#08090b" />
           </svg>
-          <span style={{ fontSize: 30, fontWeight: 800, letterSpacing: 6 }}>MJASRAR</span>
+          <span style={{ fontSize: 38, fontWeight: 800, letterSpacing: -1.5 }}>MJAsrar</span>
         </div>
         <div style={{ display: "flex", fontSize: 78, fontWeight: 800, lineHeight: 1, letterSpacing: -3, maxWidth: 1000, textTransform: "uppercase" }}>
           AI agents and software your business runs on.

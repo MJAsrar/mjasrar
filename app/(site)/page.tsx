@@ -33,8 +33,8 @@ export default function HomePage() {
           <div className="hero-copy">
             <h1>AI agents and software your business runs on.</h1>
             <p className="hero-lead">
-              MJAsrar is a software company in Islamabad. We design, build and look after chatbots, voice agents, document
-              search and custom software for companies in Pakistan and abroad.
+              We design, build and look after WhatsApp sales assistants, AI agents, document search and custom software for
+              businesses worldwide. Tested on your own data before launch, and supported after it.
             </p>
             <div className="actions">
               <Link className="btn" href="/contact">
@@ -54,8 +54,9 @@ export default function HomePage() {
       <section className="sec" aria-labelledby="start-title">
         <div className="wrap">
           <SectionHead n="01" label="Where we start" id="start-title" title="Built for how business actually runs.">
-            Customers send voice notes at midnight. The shop’s internet drops. Hosting bills matter. We design for those
-            conditions and measure results on your own data before anyone relies on them.
+            Leads message at midnight, in more than one language. Chatbot subscriptions eat into margins. Nobody trusts an
+            AI that guesses. We design for those conditions and measure results on your own data before anyone relies on
+            them.
           </SectionHead>
           <ul className="stats">
             {STATS.map((s) => (

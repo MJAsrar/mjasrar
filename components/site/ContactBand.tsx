@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { COMPANY } from "@/lib/site";
+import BookCall from "./BookCall";
 import { ArrowUpRight } from "./Icons";
 import TwistedRing from "./TwistedRing";
 
@@ -17,16 +18,18 @@ export default function ContactBand({ n }: { n?: string }) {
             Tell us what you want to automate.
           </h2>
           <p className="band-lead">
-            Send a short brief or email us. We’ll reply with questions or a time to talk, and if AI isn’t the right answer,
-            we’ll say so.
+            Book a call, send a short brief or email us. If AI isn’t the right answer, we’ll say so.
           </p>
           <div className="actions">
-            <Link className="btn" href="/contact">
+            <BookCall from="contact-band" />
+            <Link className={COMPANY.booking ? "btn btn-ghost" : "btn"} href="/contact">
               Send a project brief <ArrowUpRight />
             </Link>
-            <a className="btn btn-ghost" href={`mailto:${COMPANY.email}`}>
-              Email us
-            </a>
+            {!COMPANY.booking && (
+              <a className="btn btn-ghost" href={`mailto:${COMPANY.email}`}>
+                Email us
+              </a>
+            )}
           </div>
           <dl className="band-facts">
             <div>
