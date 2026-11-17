@@ -30,7 +30,7 @@ const FOR = [
 const STEPS = [
   {
     title: "Call",
-    text: "Twenty minutes on where your leads come from, the languages they write in, and the tools your team already uses.",
+    text: "Half an hour on where your leads come from, the languages they write in, and the tools your team already uses.",
     outputs: ["Fit or not"],
   },
   {
@@ -229,7 +229,7 @@ export default function WhatsAppAssistantPage() {
               {COMPANY.booking && (
                 <div>
                   <h2 className="label">Prefer to talk?</h2>
-                  <p>Pick a time for a 20-minute video call.</p>
+                  <p>Pick a time for a 30-minute video call.</p>
                   <p className="aside-cta">
                     <BookCall from="whatsapp-brief" />
                   </p>

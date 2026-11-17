@@ -13,7 +13,7 @@ export const COMPANY = {
   founder: "Junaid Asrar",
   portfolio: "https://portfolio.mjasrar.site",
   // Paste a Cal.com or Calendly link here and every "Book a call" button appears.
-  booking: "",
+  booking: "https://calendar.google.com/calendar/appointments/schedules/AcZssZ3yZuIhVVnwJsxfOwksCQ2t9NXeiuxoBl2CyLJBoy6qPD_Ywbk56BtITo_DaliUxxGJHY2-hucb",
   description:
     "MJAsrar builds AI agents, WhatsApp sales assistants, voice AI, document search and custom software for businesses worldwide. Based in Islamabad, working remotely across time zones.",
 };

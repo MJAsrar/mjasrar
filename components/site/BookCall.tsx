@@ -8,7 +8,7 @@ import { ArrowUpRight } from "./Icons";
 export default function BookCall({
   className = "btn",
   from,
-  children = "Book a 20-minute call",
+  children = "Book a 30-minute call",
 }: {
   className?: string;
   from: string;

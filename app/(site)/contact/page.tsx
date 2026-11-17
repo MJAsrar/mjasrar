@@ -31,7 +31,7 @@ export default function ContactPage() {
             {COMPANY.booking && (
               <div>
                 <h2 className="label">Prefer to talk?</h2>
-                <p>Pick a time for a 20-minute video call. No preparation needed.</p>
+                <p>Pick a time for a 30-minute video call. No preparation needed.</p>
                 <p className="aside-cta">
                   <BookCall from="contact-page" />
                 </p>
