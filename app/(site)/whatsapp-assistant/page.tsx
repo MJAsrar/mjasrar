@@ -6,7 +6,8 @@ import Figure from "@/components/site/Figure";
 import { ArrowUpRight, Check } from "@/components/site/Icons";
 import ProjectBrief from "@/components/site/ProjectBrief";
 import SectionHead from "@/components/site/SectionHead";
-import { COMPANY, serviceBySlug, WORK } from "@/lib/site";
+import Testimonial from "@/components/site/Testimonial";
+import { COMPANY, serviceBySlug, TESTIMONIALS, WORK } from "@/lib/site";
 
 // Landing page for the WhatsApp assistant offer: the page ads and outreach link to.
 export const metadata: Metadata = {
@@ -18,6 +19,7 @@ export const metadata: Metadata = {
 
 const caseStudy = WORK.find((w) => w.slug === "whatsapp-sales-assistant")!;
 const service = serviceBySlug("chatbots");
+const testimonial = TESTIMONIALS.find((t) => t.caseStudy === caseStudy.slug);
 
 const FOR = [
   "You run Facebook or Instagram ads that open a WhatsApp chat",
@@ -118,6 +120,7 @@ export default function WhatsAppAssistantPage() {
             ))}
           </ul>
           {caseStudy.note && <p className="cs-note">{caseStudy.note}</p>}
+          {testimonial && <Testimonial t={testimonial} />}
         </div>
       </section>
 

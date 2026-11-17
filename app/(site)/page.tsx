@@ -6,9 +6,10 @@ import Figure from "@/components/site/Figure";
 import { ArrowUpRight } from "@/components/site/Icons";
 import SectionHead from "@/components/site/SectionHead";
 import StackRail from "@/components/site/StackRail";
+import Testimonial from "@/components/site/Testimonial";
 import TwistedRing from "@/components/site/TwistedRing";
 import WorkShowcase from "@/components/site/WorkShowcase";
-import { COMPANY, FAQ, PROCESS, SERVICES, STATS, WORK } from "@/lib/site";
+import { COMPANY, FAQ, PROCESS, SERVICES, STATS, TESTIMONIALS, WORK } from "@/lib/site";
 
 const organization = {
   "@context": "https://schema.org",
@@ -69,6 +70,7 @@ export default function HomePage() {
               </li>
             ))}
           </ul>
+          <Testimonial t={TESTIMONIALS[0]} />
         </div>
       </section>
 

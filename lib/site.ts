@@ -423,6 +423,19 @@ export const ENGAGEMENTS = [
   },
 ];
 
+export type Testimonial = { quote: string; who: string; where: string; caseStudy: string };
+
+// Client quotes, each approved by the client and tied to a case study.
+export const TESTIMONIALS: Testimonial[] = [
+  {
+    quote:
+      "Our old chatbot couldn’t tell retail customers from bulk buyers. MJAsrar built us an assistant that answers in our customers’ languages, sorts the serious leads for our sales team, and costs a fraction of what we paid before.",
+    who: "Michael, CEO",
+    where: "Solar street-light manufacturer, China",
+    caseStudy: "whatsapp-sales-assistant",
+  },
+];
+
 // Real figures from shipped work, shown on the home page.
 export const STATS = [
   { figure: "98%", label: "Answer accuracy", note: "Across 256 test queries in four languages, measured before launch." },

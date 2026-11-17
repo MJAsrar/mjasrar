@@ -4,8 +4,9 @@ import { notFound } from "next/navigation";
 import ContactBand from "@/components/site/ContactBand";
 import Figure from "@/components/site/Figure";
 import { ArrowUpRight } from "@/components/site/Icons";
+import Testimonial from "@/components/site/Testimonial";
 import WorkCover from "@/components/site/WorkCover";
-import { serviceBySlug, WORK } from "@/lib/site";
+import { serviceBySlug, TESTIMONIALS, WORK } from "@/lib/site";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -32,6 +33,7 @@ export default async function CaseStudyPage({ params }: Props) {
   if (index === -1) notFound();
   const w = WORK[index];
   const next = WORK[(index + 1) % WORK.length];
+  const quote = TESTIMONIALS.find((t) => t.caseStudy === w.slug);
 
   return (
     <>
@@ -104,6 +106,7 @@ export default async function CaseStudyPage({ params }: Props) {
             ))}
           </ul>
           {w.note && <p className="cs-note">{w.note}</p>}
+          {quote && <Testimonial t={quote} link={false} />}
         </div>
       </section>
 

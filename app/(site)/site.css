@@ -168,6 +168,16 @@ p { text-wrap: pretty; }
 .stat-label { font-size: 15px; font-weight: 600; letter-spacing: -0.015em; }
 .stat-note { max-width: 24em; color: var(--fg-3); font-size: 13.5px; line-height: 1.5; }
 
+/* testimonial */
+.quote { display: grid; grid-template-columns: minmax(0, 8fr) minmax(0, 4fr); gap: 24px 64px; align-items: end; margin: clamp(56px, 7vw, 96px) 0 0; padding-top: 40px; border-top: 1px solid var(--line-strong); }
+.quote blockquote { margin: 0; }
+.quote blockquote p { font-size: clamp(24px, 2.6vw, 36px); font-weight: 500; line-height: 1.25; letter-spacing: -0.035em; text-wrap: pretty; }
+.quote figcaption { display: grid; gap: 4px; justify-items: start; }
+.quote-who { font-size: 15px; font-weight: 600; }
+.quote-where { color: var(--fg-3); font-size: 14px; }
+.quote-link { margin-top: 14px; }
+@media (max-width: 960px) { .quote { grid-template-columns: minmax(0, 1fr); } }
+
 /* agent demo */
 .demo { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(24px, 4vw, 56px); align-items: start; }
 .demo-list { display: grid; border-top: 1px solid var(--line); }
