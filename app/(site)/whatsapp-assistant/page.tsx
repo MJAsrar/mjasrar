@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import AgentDemo from "@/components/site/AgentDemo";
 import BookCall from "@/components/site/BookCall";
 import CopyEmail from "@/components/site/CopyEmail";
 import Figure from "@/components/site/Figure";
@@ -7,6 +8,7 @@ import { ArrowUpRight, Check } from "@/components/site/Icons";
 import ProjectBrief from "@/components/site/ProjectBrief";
 import SectionHead from "@/components/site/SectionHead";
 import Testimonial from "@/components/site/Testimonial";
+import TwistedRing from "@/components/site/TwistedRing";
 import { COMPANY, serviceBySlug, TESTIMONIALS, WORK } from "@/lib/site";
 
 // Landing page for the WhatsApp assistant offer: the page ads and outreach link to.
@@ -87,22 +89,26 @@ const QUESTIONS = [
 export default function WhatsAppAssistantPage() {
   return (
     <>
-      <header className="page-head">
-        <div className="wrap">
-          <p className="label">WhatsApp AI sales assistant</p>
-          <h1>Answer every WhatsApp lead in their language, day and night.</h1>
-          <p className="page-lead">
-            An assistant on your WhatsApp number that answers from your own catalogue and price list, qualifies each lead,
-            and hands the serious buyers to your sales team. Fixed price, and tested on your data before it goes live.
-          </p>
-          <div className="actions">
-            <BookCall from="whatsapp-hero" />
-            <a className={COMPANY.booking ? "btn btn-ghost" : "btn"} href="#brief">
-              Send a brief <ArrowUpRight />
-            </a>
+      <section className="hero">
+        <div className="wrap hero-grid">
+          <div className="hero-copy">
+            <p className="label hero-label">WhatsApp AI sales assistant</p>
+            <h1>Every WhatsApp lead answered, in their language.</h1>
+            <p className="hero-lead">
+              An assistant on your WhatsApp number that answers from your own catalogue and price list, day and night,
+              qualifies each lead, and hands the serious buyers to your sales team. Fixed price, and tested on your data
+              before it goes live.
+            </p>
+            <div className="actions">
+              <BookCall from="whatsapp-hero" />
+              <a className={COMPANY.booking ? "btn btn-ghost" : "btn"} href="#brief">
+                Send a brief <ArrowUpRight />
+              </a>
+            </div>
           </div>
+          <TwistedRing className="hero-ring" />
         </div>
-      </header>
+      </section>
 
       <section className="sec" aria-labelledby="proof-title">
         <div className="wrap">
@@ -124,9 +130,18 @@ export default function WhatsAppAssistantPage() {
         </div>
       </section>
 
-      <section className="sec sec-tint" aria-labelledby="fit-title">
+      <section className="sec sec-tint" aria-labelledby="demo-title">
         <div className="wrap">
-          <SectionHead n="02" label="Fit" id="fit-title" title="Who it’s for, and what you get." />
+          <SectionHead n="02" label="See it work" id="demo-title" title="One voice note, handled end to end.">
+            A customer sends a voice note late at night. Choose a step to see what the assistant did with it.
+          </SectionHead>
+          <AgentDemo />
+        </div>
+      </section>
+
+      <section className="sec" aria-labelledby="fit-title">
+        <div className="wrap">
+          <SectionHead n="03" label="Fit" id="fit-title" title="Who it’s for, and what you get." />
           <div className="svc-cols">
             <div>
               <h3 className="label">A good fit if</h3>
@@ -154,9 +169,9 @@ export default function WhatsAppAssistantPage() {
         </div>
       </section>
 
-      <section className="sec" aria-labelledby="story-title">
+      <section className="sec sec-tint" aria-labelledby="story-title">
         <div className="wrap">
-          <SectionHead n="03" label="Case study" id="story-title" title="From subscription chatbot to a sales assistant." />
+          <SectionHead n="04" label="Case study" id="story-title" title="From subscription chatbot to a sales assistant." />
           <div className="prose-grid">
             <h3>The problem</h3>
             <p>{caseStudy.challenge}</p>
@@ -175,9 +190,9 @@ export default function WhatsAppAssistantPage() {
         </div>
       </section>
 
-      <section className="sec sec-tint" aria-labelledby="steps-title">
+      <section className="sec" aria-labelledby="steps-title">
         <div className="wrap">
-          <SectionHead n="04" label="How it works" id="steps-title" title="From first call to live.">
+          <SectionHead n="05" label="How it works" id="steps-title" title="From first call to live.">
             You try a working assistant on your own catalogue before it goes anywhere near a customer.
           </SectionHead>
           <ol className="method">
@@ -200,9 +215,9 @@ export default function WhatsAppAssistantPage() {
         </div>
       </section>
 
-      <section className="sec" aria-labelledby="lp-faq-title">
+      <section className="sec sec-tint" aria-labelledby="lp-faq-title">
         <div className="wrap">
-          <SectionHead n="05" label="Questions" id="lp-faq-title" title="Before you ask." />
+          <SectionHead n="06" label="Questions" id="lp-faq-title" title="Before you ask." />
           <div className="accordion">
             {QUESTIONS.map((f, i) => (
               <details key={f.q} name="lp-faq">
@@ -220,9 +235,9 @@ export default function WhatsAppAssistantPage() {
         </div>
       </section>
 
-      <section className="sec sec-tint" id="brief" aria-labelledby="brief-title">
+      <section className="sec band-dark lp-brief" id="brief" aria-labelledby="brief-title" data-theme="dark">
         <div className="wrap">
-          <SectionHead n="06" label="Start" id="brief-title" title="Tell us about your leads.">
+          <SectionHead n="07" label="Start" id="brief-title" title="Tell us about your leads.">
             A few sentences is enough: where your leads come from, the languages they write in, and what your team does with
             them today.
           </SectionHead>

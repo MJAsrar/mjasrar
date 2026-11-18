@@ -139,6 +139,7 @@ p { text-wrap: pretty; }
 .hero-lead { max-width: 33em; margin-bottom: 34px; color: var(--fg-2); font-size: clamp(16px, 1.3vw, 18px); }
 .ring-stage { position: relative; width: 100%; aspect-ratio: 1; }
 .ring-stage canvas { touch-action: pan-y; }
+.hero-label { margin-bottom: 22px; }
 .hero-ring { max-width: 640px; justify-self: end; margin-block: -40px; }
 
 /* ---------- tools rail ---------- */
