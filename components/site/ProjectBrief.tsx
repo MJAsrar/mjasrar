@@ -1,7 +1,7 @@
 "use client";
 
-import { track } from "@vercel/analytics";
 import { useActionState, useEffect } from "react";
+import { trackEvent } from "@/lib/analytics";
 import { sendBrief, type BriefState } from "@/lib/brief";
 import { COMPANY, SERVICES } from "@/lib/site";
 
@@ -15,7 +15,7 @@ export default function ProjectBrief({ source = "contact", preselect = [] }: { s
   const [state, action, pending] = useActionState(sendBrief, initial);
 
   useEffect(() => {
-    if (state.status === "sent") track("Brief sent", { from: source });
+    if (state.status === "sent") trackEvent("Brief sent", "generate_lead", { from: source });
   }, [state, source]);
 
   if (state.status === "sent") {

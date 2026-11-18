@@ -1,6 +1,6 @@
 "use client";
 
-import { track } from "@vercel/analytics";
+import { trackEvent } from "@/lib/analytics";
 import { COMPANY } from "@/lib/site";
 import { ArrowUpRight } from "./Icons";
 
@@ -21,7 +21,7 @@ export default function BookCall({
       href={COMPANY.booking}
       target="_blank"
       rel="noopener noreferrer"
-      onClick={() => track("Book call clicked", { from })}
+      onClick={() => trackEvent("Book call clicked", "book_call_click", { from })}
     >
       {children} <ArrowUpRight />
     </a>
