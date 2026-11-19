@@ -1,50 +1,84 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import AgentDemo from "@/components/site/AgentDemo";
 import BookCall from "@/components/site/BookCall";
+import ChatMock from "@/components/site/ChatMock";
 import CopyEmail from "@/components/site/CopyEmail";
 import Figure from "@/components/site/Figure";
-import { ArrowUpRight, Check } from "@/components/site/Icons";
+import { Check } from "@/components/site/Icons";
 import ProjectBrief from "@/components/site/ProjectBrief";
 import SectionHead from "@/components/site/SectionHead";
 import Testimonial from "@/components/site/Testimonial";
-import TwistedRing from "@/components/site/TwistedRing";
-import { COMPANY, serviceBySlug, TESTIMONIALS, WORK } from "@/lib/site";
+import WhatsAppLink from "@/components/site/WhatsAppLink";
+import { COMPANY, TESTIMONIALS, WORK } from "@/lib/site";
 
-// Landing page for the WhatsApp assistant offer: the page ads and outreach link to.
+// Landing page for the WhatsApp assistant offer, aimed at UAE businesses.
+// Google Ads and outreach emails link here, so it has no site menu (see SiteHeader).
 export const metadata: Metadata = {
-  title: "WhatsApp AI sales assistant",
+  title: "WhatsApp AI assistant for UAE businesses",
   description:
-    "A WhatsApp assistant that answers leads in their own language, day and night, qualifies them and hands the serious ones to your sales team. Fixed price, tested on your data before launch.",
+    "A WhatsApp assistant that answers every lead in Arabic or English, day and night, books or qualifies them and hands serious buyers to your team. Projects from AED 1,000, fixed price.",
   alternates: { canonical: "/whatsapp-assistant" },
 };
 
 const caseStudy = WORK.find((w) => w.slug === "whatsapp-sales-assistant")!;
-const service = serviceBySlug("chatbots");
 const testimonial = TESTIMONIALS.find((t) => t.caseStudy === caseStudy.slug);
+// The accuracy and language figures. The hosting-cost figure is in the FAQ instead.
+const proof = caseStudy.highlights.slice(0, 2);
 
-const FOR = [
-  "You run Facebook or Instagram ads that open a WhatsApp chat",
-  "Buyers write in more than one language",
-  "Leads arrive outside office hours, or faster than your team can reply",
-  "Your sales team spends its day sorting serious buyers from casual questions",
-  "You pay for a chatbot subscription that doesn’t know your products",
+const INDUSTRIES = [
+  { name: "Clinics and dental", text: "Answers prices and books appointments, even at midnight." },
+  { name: "Real estate", text: "Asks budget, area and timeline before an agent picks up the phone." },
+  { name: "Car rental", text: "Quotes daily and monthly rates, collects documents and confirms pickup." },
+  { name: "Training and tuition centres", text: "Answers fees and schedules, then books a trial class." },
+  { name: "Salons and spas", text: "Shares packages and books slots without tying up your front desk." },
+  { name: "Travel and tourism", text: "Sends packages, answers the usual questions and collects traveller details." },
+];
+
+const UAE = [
+  "Replies in Arabic and English, and other languages your customers write in",
+  "Works with Instagram and Facebook ads that open a WhatsApp chat",
+  "Answers 24/7 in UAE time, including weekends and Ramadan hours",
+  "Quotes in AED from your own price list",
+];
+
+const AUTOMATES = [
+  "Answers questions from your price list, services and FAQs",
+  "Books appointments into Google Calendar or your booking system",
+  "Qualifies each lead: what they need, budget, timing and area",
+  "Sends every lead to Google Sheets or your CRM, with the ad it came from",
+  "Alerts your team on WhatsApp or email when a buyer is ready",
+  "Follows up with customers who went quiet",
+  "Hands the chat to a person whenever it isn’t sure",
+];
+
+const PRICE_FACTORS = [
+  "How many languages it needs to handle",
+  "Bookings, Google Sheets or CRM connections",
+  "The size of your price list or catalogue",
+  "How many WhatsApp numbers or branches",
+];
+
+const INCLUDED = [
+  "A written scope and a fixed price before any work starts",
+  "A pilot on a test number, answering from your own data",
+  "An accuracy test on real customer questions",
+  "Launch on your number, and a close watch over the first weeks",
 ];
 
 const STEPS = [
   {
-    title: "Call",
-    text: "Half an hour on where your leads come from, the languages they write in, and the tools your team already uses.",
+    title: "Chat or call",
+    text: "A WhatsApp chat or a 30-minute call about where your leads come from, the languages they write in and what your team does today.",
     outputs: ["Fit or not"],
   },
   {
     title: "Fixed-price scope",
-    text: "A written scope with what the assistant will do, the timeline, a fixed price and an estimate of monthly running costs.",
+    text: "A written scope with what the assistant will do, the timeline, a fixed price in AED and an estimate of monthly running costs.",
     outputs: ["Scope", "Price"],
   },
   {
-    title: "Pilot on your catalogue",
-    text: "A working assistant on a test number, answering from your own catalogue, price lists and FAQs.",
+    title: "Pilot on your data",
+    text: "A working assistant on a test number, answering from your own prices, services and FAQs. You try it before your customers do.",
     outputs: ["Test number"],
   },
   {
@@ -61,62 +95,109 @@ const STEPS = [
 
 const QUESTIONS = [
   {
-    q: "Do we need a WhatsApp Business API account?",
-    a: "No. We set it up with you on Meta’s WhatsApp Business Platform, under your own business account. Meta bills its messaging fees to you directly, with no per-seat chatbot subscription in between.",
+    q: "What does it cost?",
+    a: "Projects start from AED 1,000, at a fixed price agreed before we begin. After launch you pay Meta’s WhatsApp messaging fees directly, plus hosting and AI usage, and every quote includes an estimate of those. For one client, hosting costs under $5 a month, replacing an $80-a-month chatbot subscription.",
   },
   {
-    q: "Does it work with our ads?",
-    a: "Yes. Click-to-WhatsApp ads on Facebook and Instagram open a chat that the assistant answers straight away, and it can record which ad each lead came from.",
+    q: "Does it reply in Arabic?",
+    a: "Yes. It replies in the language the customer writes in, including Arabic and English. Before launch we test it on real messages from your customers, in each language they use.",
+  },
+  {
+    q: "Will I be talking to a bot when I contact you?",
+    a: "No. Our WhatsApp is answered by Junaid, the founder, who also builds your assistant.",
+  },
+  {
+    q: "You’re based in Pakistan. How does that work for a UAE business?",
+    a: "We’re in Islamabad, one hour ahead of the UAE, so our working day overlaps yours. We work over WhatsApp, video calls and shared documents, and the assistant runs in the cloud, answering your customers around the clock.",
+  },
+  {
+    q: "Do we need a WhatsApp Business API account?",
+    a: "No. We set it up with you on Meta’s WhatsApp Business Platform, under your own business account. Meta bills its messaging fees to you directly, with no per-seat chatbot subscription in between.",
   },
   {
     q: "What happens when it doesn’t know the answer?",
     a: "It doesn’t guess. It asks for details or hands the conversation to your team, and every conversation is logged so you can review it.",
   },
   {
-    q: "Which languages does it speak?",
-    a: "The assistant we built for an export manufacturer answers in English, Spanish, French and Arabic from one number. Current models handle most languages well, and we test on real messages from your customers before launch.",
-  },
-  {
-    q: "What does it cost to run?",
-    a: "Hosting for the assistant above costs under $5 a month, against the $80 subscription it replaced. On top of hosting come Meta’s messaging fees and model usage, which depend on your volume. Every quote includes an estimate.",
-  },
-  {
     q: "What happens to our data?",
-    a: "Your catalogue, documents and conversations stay in accounts you own, and we don’t use them to train models.",
+    a: "Your price lists, documents and conversations stay in accounts you own, and we don’t use them to train models.",
   },
 ];
 
 export default function WhatsAppAssistantPage() {
   return (
     <>
-      <section className="hero">
+      <section className="hero lp-hero">
         <div className="wrap hero-grid">
           <div className="hero-copy">
-            <p className="label hero-label">WhatsApp AI sales assistant</p>
-            <h1>Every WhatsApp lead answered, in their language.</h1>
+            <p className="label hero-label">WhatsApp AI assistant · for UAE businesses</p>
+            <h1>Every WhatsApp lead answered, in Arabic or English.</h1>
             <p className="hero-lead">
-              An assistant on your WhatsApp number that answers from your own catalogue and price list, day and night,
-              qualifies each lead, and hands the serious buyers to your sales team. Fixed price, and tested on your data
-              before it goes live.
+              An assistant on your WhatsApp number that replies in seconds from your own prices and services, books or
+              qualifies each customer, and passes serious buyers to your team. Day and night, in UAE time.
+            </p>
+            <p className="lp-price">
+              <b>From AED 1,000</b> · fixed price · tested on your data before launch
             </p>
             <div className="actions">
-              <BookCall from="whatsapp-hero" />
-              <a className={COMPANY.booking ? "btn btn-ghost" : "btn"} href="#brief">
-                Send a brief <ArrowUpRight />
-              </a>
+              <WhatsAppLink from="whatsapp-hero" />
+              <BookCall from="whatsapp-hero" className="btn btn-ghost" />
             </div>
+            <p className="lp-human">You’ll chat with Junaid, the founder. A person, not a bot.</p>
           </div>
-          <TwistedRing className="hero-ring" />
+          <ChatMock />
         </div>
       </section>
 
-      <section className="sec" aria-labelledby="proof-title">
+      <section className="sec sec-tint" aria-labelledby="uae-title">
         <div className="wrap">
-          <SectionHead n="01" label="Results" id="proof-title" title="Already working for an exporter.">
-            For a solar street-light manufacturer whose ads bring buyers from around the world to WhatsApp.
+          <SectionHead n="01" label="For UAE businesses" id="uae-title" title="Made for how the UAE buys.">
+            Customers here message before they buy, often late at night and in more than one language. If nobody answers,
+            they message the next business.
+          </SectionHead>
+          <ul className="lp-industries">
+            {INDUSTRIES.map((x) => (
+              <li key={x.name}>
+                <h3>{x.name}</h3>
+                <p>{x.text}</p>
+              </li>
+            ))}
+          </ul>
+          <ul className="checks-list lp-uae">
+            {UAE.map((d) => (
+              <li key={d}>
+                <Check />
+                {d}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section className="sec" aria-labelledby="auto-title">
+        <div className="wrap">
+          <SectionHead n="02" label="Automation" id="auto-title" title="More than replies.">
+            The assistant does the repetitive work around each chat, so your team only spends time on customers ready to
+            buy.
+          </SectionHead>
+          <ul className="checks-list lp-auto">
+            {AUTOMATES.map((d) => (
+              <li key={d}>
+                <Check />
+                {d}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section className="sec sec-tint" aria-labelledby="proof-title">
+        <div className="wrap">
+          <SectionHead n="03" label="Results" id="proof-title" title="Already live for a client.">
+            A solar street-light manufacturer whose ads bring buyers from many countries to WhatsApp.
           </SectionHead>
           <ul className="stats cs-stats">
-            {caseStudy.highlights.map((h) => (
+            {proof.map((h) => (
               <li key={h.figure}>
                 <b>
                   <Figure value={h.figure} />
@@ -125,28 +206,29 @@ export default function WhatsAppAssistantPage() {
               </li>
             ))}
           </ul>
-          {caseStudy.note && <p className="cs-note">{caseStudy.note}</p>}
           {testimonial && <Testimonial t={testimonial} />}
         </div>
       </section>
 
-      <section className="sec sec-tint" aria-labelledby="demo-title">
+      <section className="sec" aria-labelledby="demo-title">
         <div className="wrap">
-          <SectionHead n="02" label="See it work" id="demo-title" title="One voice note, handled end to end.">
-            A customer sends a voice note late at night. Choose a step to see what the assistant did with it.
+          <SectionHead n="04" label="See it work" id="demo-title" title="One voice note, handled end to end.">
+            Someone sends an Arabic voice note about a Dubai Marina flat at 11:42 pm. Choose a step to see what the assistant does with it.
           </SectionHead>
-          <AgentDemo />
+          <AgentDemo variant="uae" />
         </div>
       </section>
 
-      <section className="sec" aria-labelledby="fit-title">
+      <section className="sec sec-tint" aria-labelledby="price-title">
         <div className="wrap">
-          <SectionHead n="03" label="Fit" id="fit-title" title="Who it’s for, and what you get." />
+          <SectionHead n="05" label="Pricing" id="price-title" title="From AED 1,000, fixed price.">
+            You know the full project price before any work starts. No per-seat chatbot subscription afterwards.
+          </SectionHead>
           <div className="svc-cols">
             <div>
-              <h3 className="label">A good fit if</h3>
+              <h3 className="label">What sets the price</h3>
               <ul className="checks-list">
-                {FOR.map((d) => (
+                {PRICE_FACTORS.map((d) => (
                   <li key={d}>
                     <Check />
                     {d}
@@ -155,9 +237,9 @@ export default function WhatsAppAssistantPage() {
               </ul>
             </div>
             <div>
-              <h3 className="label">What you get</h3>
+              <h3 className="label">Included in every project</h3>
               <ul className="checks-list">
-                {service.deliverables.map((d) => (
+                {INCLUDED.map((d) => (
                   <li key={d}>
                     <Check />
                     {d}
@@ -166,34 +248,22 @@ export default function WhatsAppAssistantPage() {
               </ul>
             </div>
           </div>
-        </div>
-      </section>
-
-      <section className="sec sec-tint" aria-labelledby="story-title">
-        <div className="wrap">
-          <SectionHead n="04" label="Case study" id="story-title" title="From subscription chatbot to a sales assistant." />
-          <div className="prose-grid">
-            <h3>The problem</h3>
-            <p>{caseStudy.challenge}</p>
-          </div>
-          <div className="prose-grid">
-            <h3>What we built</h3>
-            <div>
-              <p>{caseStudy.solution}</p>
-              <p className="lp-more">
-                <Link className="u-link mono-link" href={`/work/${caseStudy.slug}`}>
-                  Read the full case study <ArrowUpRight />
-                </Link>
-              </p>
-            </div>
+          <p className="lp-running">
+            Running costs after launch: Meta’s WhatsApp message fees, billed to you directly, plus hosting and AI usage.
+            Your quote includes an estimate.
+          </p>
+          <div className="actions lp-price-cta">
+            <WhatsAppLink from="whatsapp-pricing" text="Hi MJAsrar, I'd like a quote for a WhatsApp assistant for my business.">
+              Get a quote on WhatsApp
+            </WhatsAppLink>
           </div>
         </div>
       </section>
 
       <section className="sec" aria-labelledby="steps-title">
         <div className="wrap">
-          <SectionHead n="05" label="How it works" id="steps-title" title="From first call to live.">
-            You try a working assistant on your own catalogue before it goes anywhere near a customer.
+          <SectionHead n="06" label="How it works" id="steps-title" title="From first chat to live.">
+            You try a working assistant on your own data before it goes anywhere near a customer.
           </SectionHead>
           <ol className="method">
             {STEPS.map((p, i) => (
@@ -217,7 +287,7 @@ export default function WhatsAppAssistantPage() {
 
       <section className="sec sec-tint" aria-labelledby="lp-faq-title">
         <div className="wrap">
-          <SectionHead n="06" label="Questions" id="lp-faq-title" title="Before you ask." />
+          <SectionHead n="07" label="Questions" id="lp-faq-title" title="Before you ask." />
           <div className="accordion">
             {QUESTIONS.map((f, i) => (
               <details key={f.q} name="lp-faq">
@@ -237,19 +307,25 @@ export default function WhatsAppAssistantPage() {
 
       <section className="sec band-dark lp-brief" id="brief" aria-labelledby="brief-title" data-theme="dark">
         <div className="wrap">
-          <SectionHead n="07" label="Start" id="brief-title" title="Tell us about your leads.">
-            A few sentences is enough: where your leads come from, the languages they write in, and what your team does with
-            them today.
+          <SectionHead n="08" label="Start" id="brief-title" title="Tell us about your business.">
+            Two minutes is enough. We’ll reply on WhatsApp.
           </SectionHead>
           <div className="contact-grid">
-            <ProjectBrief source="whatsapp-assistant" preselect={["chatbots"]} />
+            <ProjectBrief source="whatsapp-assistant" short />
             <aside className="contact-aside" aria-label="Other ways to reach us">
+              <div>
+                <h2 className="label">Faster on WhatsApp</h2>
+                <p>Message us directly. Junaid, the founder, replies personally.</p>
+                <p className="aside-cta">
+                  <WhatsAppLink from="whatsapp-brief" />
+                </p>
+              </div>
               {COMPANY.booking && (
                 <div>
                   <h2 className="label">Prefer to talk?</h2>
                   <p>Pick a time for a 30-minute video call.</p>
                   <p className="aside-cta">
-                    <BookCall from="whatsapp-brief" />
+                    <BookCall from="whatsapp-brief" className="btn btn-ghost" />
                   </p>
                 </div>
               )}
@@ -264,14 +340,16 @@ export default function WhatsAppAssistantPage() {
               </div>
               <div>
                 <h2 className="label">Studio</h2>
-                <p>
-                  {COMPANY.city}, {COMPANY.country} ({COMPANY.timezone}). Working with clients remotely across time zones.
-                </p>
+                <p>{COMPANY.city}, {COMPANY.country}. One hour ahead of the UAE, working with you remotely.</p>
               </div>
             </aside>
           </div>
         </div>
       </section>
+
+      <WhatsAppLink from="whatsapp-float" className="wa-float" label="Chat with us on WhatsApp">
+        <span>Chat with us</span>
+      </WhatsAppLink>
     </>
   );
 }

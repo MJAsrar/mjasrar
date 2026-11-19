@@ -17,6 +17,7 @@ export async function sendBrief(_prev: BriefState, data: FormData): Promise<Brie
 
   const name = get("name", 120);
   const email = get("email", 200);
+  const phone = get("phone", 40);
   const company = get("company", 160);
   const timing = get("timing", 80);
   const source = get("source", 80);
@@ -26,8 +27,16 @@ export async function sendBrief(_prev: BriefState, data: FormData): Promise<Brie
     .map((n) => String(n).slice(0, 40))
     .slice(0, 12);
 
-  if (!name || !details || !EMAIL_RE.test(email)) {
-    return { status: "error", message: "Please add your name, a valid email and a few words about the project." };
+  // The short form asks for a WhatsApp number and makes email optional; the full form needs an email.
+  const phoneOk = /\d{7,}/.test(phone.replace(/\D/g, ""));
+  const emailOk = EMAIL_RE.test(email);
+  if (!name || !details || (!emailOk && !phoneOk) || (email && !emailOk)) {
+    return {
+      status: "error",
+      message: phone
+        ? "Please add your name, a valid WhatsApp number and a few words about what you need."
+        : "Please add your name, a valid email and a few words about the project.",
+    };
   }
 
   const key = process.env.RESEND_API_KEY;
@@ -38,7 +47,8 @@ export async function sendBrief(_prev: BriefState, data: FormData): Promise<Brie
 
   const text = [
     `Name: ${name}`,
-    `Email: ${email}`,
+    ...(phone ? [`WhatsApp: ${phone} (https://wa.me/${phone.replace(/\D/g, "")})`] : []),
+    ...(email ? [`Email: ${email}`] : []),
     ...(company ? [`Company: ${company}`] : []),
     ...(needs.length ? [`Looking for: ${needs.join(", ")}`] : []),
     ...(timing ? [`Timing: ${timing}`] : []),
@@ -54,7 +64,7 @@ export async function sendBrief(_prev: BriefState, data: FormData): Promise<Brie
       body: JSON.stringify({
         from: process.env.RESEND_FROM || `MJAsrar website <website@mjasrar.site>`,
         to: [COMPANY.email],
-        reply_to: email,
+        ...(emailOk ? { reply_to: email } : {}),
         subject: `Project brief from ${name}${company ? ` (${company})` : ""}`,
         text,
       }),

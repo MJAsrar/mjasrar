@@ -7,6 +7,11 @@ import { NAV } from "@/lib/site";
 import { ArrowUpRight } from "./Icons";
 import Mark from "./Mark";
 import ThemeToggle from "./ThemeToggle";
+import WhatsAppLink from "./WhatsAppLink";
+
+// Landing pages that paid traffic arrives on: no site menu, so visitors stay on the
+// offer, and the header button opens WhatsApp instead of the contact page.
+const FOCUSED = ["/whatsapp-assistant"];
 
 const subscribeScroll = (cb: () => void) => {
   window.addEventListener("scroll", cb, { passive: true });
@@ -29,6 +34,24 @@ export default function SiteHeader() {
   }, [open]);
 
   const isCurrent = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
+
+  if (FOCUSED.includes(pathname)) {
+    return (
+      <header className="site-header site-header-focused" data-scrolled={scrolled}>
+        <div className="nav-shell">
+          <Link href="/" className="brand" aria-label="MJAsrar home">
+            <Mark size={26} />
+            <span>MJAsrar</span>
+          </Link>
+          <div className="nav-end">
+            <WhatsAppLink from="header" className="btn btn-sm">
+              WhatsApp us
+            </WhatsAppLink>
+          </div>
+        </div>
+      </header>
+    );
+  }
 
   return (
     <header className="site-header" data-scrolled={scrolled || open} data-open={open}>

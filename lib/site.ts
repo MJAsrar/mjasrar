@@ -16,7 +16,14 @@ export const COMPANY = {
   booking: "https://calendar.google.com/calendar/appointments/schedules/AcZssZ3yZuIhVVnwJsxfOwksCQ2t9NXeiuxoBl2CyLJBoy6qPD_Ywbk56BtITo_DaliUxxGJHY2-hucb",
   description:
     "MJAsrar builds AI agents, WhatsApp sales assistants, voice AI, document search and custom software for businesses worldwide. Based in Islamabad, working remotely across time zones.",
+  // WhatsApp number in international format, digits only. A person answers it, not a bot.
+  whatsapp: "923392220951",
 };
+
+// A wa.me link to the company WhatsApp, with an optional message already typed in.
+export function whatsappLink(text?: string) {
+  return `https://wa.me/${COMPANY.whatsapp}${text ? `?text=${encodeURIComponent(text)}` : ""}`;
+}
 
 export const NAV = [
   { href: "/services", label: "Services" },

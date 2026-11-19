@@ -6,7 +6,100 @@ const BARS = [6, 10, 16, 9, 22, 28, 18, 12, 24, 30, 20, 14, 8, 18, 26, 32, 22, 1
 
 type Step = { name: string; time: string; title: string; tags: string[]; body: ReactNode };
 
-const STEPS: Step[] = [
+// UAE version for the WhatsApp landing page: a Dubai rental enquiry as an Arabic voice note.
+const STEPS_UAE: Step[] = [
+  {
+    name: "Heard",
+    time: "11:42:03 pm",
+    title: "An Arabic voice note arrives after hours",
+    tags: ["Speech-to-text", "Gulf Arabic"],
+    body: (
+      <>
+        <div className="demo-wave" aria-hidden="true">
+          {BARS.map((h, i) => (
+            <i key={i} style={{ height: h }} />
+          ))}
+          <span>0:12</span>
+        </div>
+        <p className="ar" lang="ar" dir="rtl">
+          السلام عليكم، أبي شقة غرفتين في دبي مارينا، إيجار سنوي، والميزانية حوالي 120 ألف درهم. عندكم شي متوفر؟
+        </p>
+        <p className="gloss">
+          “I’m looking for a two-bedroom flat in Dubai Marina, yearly rent, budget around AED 120,000. Anything
+          available?”
+        </p>
+      </>
+    ),
+  },
+  {
+    name: "Checked",
+    time: "11:42:05 pm",
+    title: "It checks your own listings",
+    tags: ["Listings lookup", "Google Sheets"],
+    body: (
+      <dl className="demo-sources">
+        <div>
+          <dt>Listings</dt>
+          <dd>3 two-bedroom flats in Dubai Marina, AED 110,000 to 125,000 a year</dd>
+        </div>
+        <div>
+          <dt>Availability</dt>
+          <dd>2 ready now, 1 from 1 January</dd>
+        </div>
+        <div>
+          <dt>Terms</dt>
+          <dd>Yearly rent, up to 4 cheques</dd>
+        </div>
+      </dl>
+    ),
+  },
+  {
+    name: "Replied",
+    time: "11:42:09 pm",
+    title: "It replies in Arabic, with photos",
+    tags: ["Arabic", "WhatsApp Cloud API"],
+    body: (
+      <>
+        <p className="ar" lang="ar" dir="rtl">
+          وعليكم السلام! عندنا 3 شقق غرفتين في دبي مارينا بين 110 و125 ألف درهم سنوياً، ثنتين منها جاهزة للسكن. أرسلت لك
+          الصور والتفاصيل. متى يناسبك تشوفها؟
+        </p>
+        <p className="gloss">
+          “We have three two-bedroom flats in Dubai Marina from AED 110,000 to 125,000 a year, two ready to move in.
+          I’ve sent photos and details. When would you like to view?”
+        </p>
+      </>
+    ),
+  },
+  {
+    name: "Handed over",
+    time: "11:42:40 pm",
+    title: "And books a viewing with your agent",
+    tags: ["CRM", "Agent handoff"],
+    body: (
+      <dl className="demo-sources">
+        <div>
+          <dt>Lead</dt>
+          <dd>Rental, 2 bedrooms, Dubai Marina</dd>
+        </div>
+        <div>
+          <dt>Budget</dt>
+          <dd>AED 120,000 a year</dd>
+        </div>
+        <div>
+          <dt>Source</dt>
+          <dd>Instagram ad, Marina listings</dd>
+        </div>
+        <div>
+          <dt>Next</dt>
+          <dd>Viewing tomorrow at 10:00 am, sent to the agent</dd>
+        </div>
+      </dl>
+    ),
+  },
+];
+
+const STEPS_DEFAULT: Step[] = [
   {
     name: "Heard",
     time: "11:42:03 pm",
@@ -91,7 +184,9 @@ const STEPS: Step[] = [
   },
 ];
 
-export default function AgentDemo() {
+export default function AgentDemo({ variant = "default" }: { variant?: "default" | "uae" }) {
+  const STEPS = variant === "uae" ? STEPS_UAE : STEPS_DEFAULT;
+  const count = STEPS.length;
   const [active, setActive] = useState(0);
   // Auto-advance until the visitor picks a step themselves.
   const [auto, setAuto] = useState(true);
@@ -103,12 +198,12 @@ export default function AgentDemo() {
     let inView = false;
     const io = new IntersectionObserver(([e]) => (inView = e.isIntersecting), { threshold: 0.4 });
     if (root.current) io.observe(root.current);
-    const id = setInterval(() => inView && setActive((a) => (a + 1) % STEPS.length), 4200);
+    const id = setInterval(() => inView && setActive((a) => (a + 1) % count), 4200);
     return () => {
       clearInterval(id);
       io.disconnect();
     };
-  }, [auto]);
+  }, [auto, count]);
 
   const choose = (i: number) => {
     setAuto(false);

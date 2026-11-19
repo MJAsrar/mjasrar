@@ -11,12 +11,87 @@ const initial: BriefState = { status: "idle", message: "" };
 
 // The brief is sent straight to the company inbox by a server action.
 // `source` says which page it came from, so ad and outreach traffic can be told apart.
-export default function ProjectBrief({ source = "contact", preselect = [] }: { source?: string; preselect?: string[] }) {
+// `short` is the landing-page version: name, WhatsApp number, optional email and one question.
+export default function ProjectBrief({
+  source = "contact",
+  preselect = [],
+  short = false,
+}: {
+  source?: string;
+  preselect?: string[];
+  short?: boolean;
+}) {
   const [state, action, pending] = useActionState(sendBrief, initial);
 
   useEffect(() => {
     if (state.status === "sent") trackEvent("Brief sent", "generate_lead", { from: source });
   }, [state, source]);
+
+  if (state.status === "sent" && short) {
+    return (
+      <div className="brief">
+        <p className="form-status" role="status">
+          Thanks, we’ve got it. Junaid will message you on WhatsApp to talk it through.
+        </p>
+      </div>
+    );
+  }
+
+  if (short) {
+    return (
+      <form className="brief" action={action}>
+        <input type="hidden" name="source" value={source} />
+        <input type="hidden" name="needs" value="WhatsApp assistant" />
+        <div className="hp" aria-hidden="true">
+          <label htmlFor="website">Website</label>
+          <input id="website" name="website" tabIndex={-1} autoComplete="off" />
+        </div>
+        <div className="two">
+          <div className="field">
+            <label htmlFor="name">Your name</label>
+            <input id="name" name="name" autoComplete="name" required maxLength={120} />
+          </div>
+          <div className="field">
+            <label htmlFor="phone">WhatsApp number</label>
+            <input
+              id="phone"
+              name="phone"
+              type="tel"
+              inputMode="tel"
+              autoComplete="tel"
+              required
+              maxLength={40}
+              placeholder="+971 50 123 4567"
+            />
+          </div>
+        </div>
+        <div className="field">
+          <label htmlFor="email">
+            Email <span className="optional">(optional)</span>
+          </label>
+          <input id="email" name="email" type="email" autoComplete="email" maxLength={200} />
+        </div>
+        <div className="field">
+          <label htmlFor="details">What kind of business, and what should WhatsApp handle?</label>
+          <textarea
+            id="details"
+            name="details"
+            required
+            maxLength={1200}
+            placeholder="For example: dental clinic in Dubai. We get 40+ WhatsApp messages a day from Instagram ads, in Arabic and English, and miss most of them after 8 pm."
+          />
+        </div>
+        <button type="submit" className="btn" disabled={pending}>
+          {pending ? "Sending…" : "Send"}
+        </button>
+        {state.status === "error" && (
+          <p className="form-error" role="alert">
+            {state.message}
+          </p>
+        )}
+      </form>
+    );
+  }
 
   if (state.status === "sent") {
     return (
