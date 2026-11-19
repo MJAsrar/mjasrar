@@ -13,6 +13,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     page("", 1),
     page("/services", 0.9),
     page("/whatsapp-assistant", 0.9),
+    page("/websites", 0.9),
     page("/work", 0.8),
     ...WORK.map((w) => page(`/work/${w.slug}`, 0.7)),
     page("/about", 0.6),

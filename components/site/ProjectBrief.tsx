@@ -12,14 +12,21 @@ const initial: BriefState = { status: "idle", message: "" };
 // The brief is sent straight to the company inbox by a server action.
 // `source` says which page it came from, so ad and outreach traffic can be told apart.
 // `short` is the landing-page version: name, WhatsApp number, optional email and one question.
+// `need`, `question` and `example` tailor the short form to the landing page it sits on.
 export default function ProjectBrief({
   source = "contact",
   preselect = [],
   short = false,
+  need = "WhatsApp assistant",
+  question = "What kind of business, and what should WhatsApp handle?",
+  example = "For example: dental clinic in Dubai. We get 40+ WhatsApp messages a day from Instagram ads, in Arabic and English, and miss most of them after 8 pm.",
 }: {
   source?: string;
   preselect?: string[];
   short?: boolean;
+  need?: string;
+  question?: string;
+  example?: string;
 }) {
   const [state, action, pending] = useActionState(sendBrief, initial);
 
@@ -41,7 +48,7 @@ export default function ProjectBrief({
     return (
       <form className="brief" action={action}>
         <input type="hidden" name="source" value={source} />
-        <input type="hidden" name="needs" value="WhatsApp assistant" />
+        <input type="hidden" name="needs" value={need} />
         <div className="hp" aria-hidden="true">
           <label htmlFor="website">Website</label>
           <input id="website" name="website" tabIndex={-1} autoComplete="off" />
@@ -72,14 +79,8 @@ export default function ProjectBrief({
           <input id="email" name="email" type="email" autoComplete="email" maxLength={200} />
         </div>
         <div className="field">
-          <label htmlFor="details">What kind of business, and what should WhatsApp handle?</label>
-          <textarea
-            id="details"
-            name="details"
-            required
-            maxLength={1200}
-            placeholder="For example: dental clinic in Dubai. We get 40+ WhatsApp messages a day from Instagram ads, in Arabic and English, and miss most of them after 8 pm."
-          />
+          <label htmlFor="details">{question}</label>
+          <textarea id="details" name="details" required maxLength={1200} placeholder={example} />
         </div>
         <button type="submit" className="btn" disabled={pending}>
           {pending ? "Sending…" : "Send"}

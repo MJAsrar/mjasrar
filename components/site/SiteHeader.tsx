@@ -11,7 +11,7 @@ import WhatsAppLink from "./WhatsAppLink";
 
 // Landing pages that paid traffic arrives on: no site menu, so visitors stay on the
 // offer, and the header button opens WhatsApp instead of the contact page.
-const FOCUSED = ["/whatsapp-assistant"];
+const FOCUSED = ["/whatsapp-assistant", "/websites"];
 
 const subscribeScroll = (cb: () => void) => {
   window.addEventListener("scroll", cb, { passive: true });
